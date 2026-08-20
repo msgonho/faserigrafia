@@ -70,3 +70,4 @@ Site em `http://localhost:3000`, painel em `http://localhost:3000/entrar`.
   de `criarOrcamento`, em `src/app/actions.ts`
 - **PDF do orçamento** para enviar ao cliente
 - **Histórico por cliente**, agrupando pedidos pelo telefone
+ 
