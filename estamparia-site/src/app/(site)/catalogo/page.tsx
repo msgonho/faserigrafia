@@ -26,17 +26,27 @@ export default async function Catalogo({
   const atual = categorias.find((c) => c.slug === cat);
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-12">
-      <p className="rotulo">Catálogo</p>
-      <h1 className="mt-4 text-[clamp(2rem,5vw,3.2rem)]">{atual ? atual.name : "Tudo que a gente estampa"}</h1>
-      {atual?.description && <p className="mt-3 text-[15px] text-grafite">{atual.description}</p>}
+    <div>
+      <div className="malha text-white">
+        <div className="mx-auto max-w-6xl px-5 py-12 md:py-16">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-[#29ABE2]">Catálogo</p>
+          <h1 className="mt-3 text-[clamp(1.9rem,5vw,3rem)] text-white">
+            {atual ? atual.name : "Tudo que a gente estampa"}
+          </h1>
+          {atual?.description && (
+            <p className="mt-3 max-w-xl text-[16px] text-white/65">{atual.description}</p>
+          )}
+        </div>
+      </div>
 
-      <nav className="mt-8 flex flex-wrap gap-2 border-b border-linha pb-6">
+      <div className="mx-auto max-w-6xl px-5 py-10">
+
+      <nav className="flex flex-wrap gap-2 border-b border-linha pb-6">
         <Link
           href="/catalogo"
-          className={`px-3 py-2 text-[13px] font-medium transition-colors ${
+          className={`px-4 py-2 text-[14px] font-semibold transition-colors ${
             !cat ? "bg-tinta text-white" : "border border-linha text-grafite hover:border-tinta"
-          }`}
+          } rounded-full`}
         >
           Todos
         </Link>
@@ -44,11 +54,11 @@ export default async function Catalogo({
           <Link
             key={c.id}
             href={`/catalogo?cat=${c.slug}`}
-            className={`px-3 py-2 text-[13px] font-medium transition-colors ${
+            className={`px-4 py-2 text-[14px] font-semibold transition-colors ${
               cat === c.slug
                 ? "bg-tinta text-white"
                 : "border border-linha text-grafite hover:border-tinta"
-            }`}
+            } rounded-full`}
           >
             {c.name}
           </Link>
@@ -73,6 +83,7 @@ export default async function Catalogo({
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }

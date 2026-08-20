@@ -89,3 +89,40 @@
     @apply rounded-xl border border-linha bg-white shadow-cartao;
   }
 }
+
+@layer components {
+  /* Fundo com brilho CMYK difuso, usado no topo e nas faixas. */
+  .malha {
+    background-color: #0E0F13;
+    background-image:
+      radial-gradient(38rem 26rem at 12% -10%, rgba(41, 171, 226, 0.30), transparent 60%),
+      radial-gradient(32rem 24rem at 88% 8%, rgba(236, 0, 140, 0.26), transparent 60%),
+      radial-gradient(30rem 22rem at 62% 108%, rgba(255, 194, 14, 0.20), transparent 60%);
+  }
+
+  .vidro {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+  }
+
+  .faixa-cmyk {
+    background: linear-gradient(90deg, #29abe2, #1b75bc 30%, #ec008c 62%, #f58220 84%, #ffc20e);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .surge {
+    animation: surge 0.6s cubic-bezier(0.22, 0.9, 0.28, 1) both;
+  }
+  @keyframes surge {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

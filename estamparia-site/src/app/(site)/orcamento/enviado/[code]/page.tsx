@@ -36,7 +36,7 @@ export default async function Enviado({ params }: { params: Promise<{ code: stri
           {orcamento.items.map((i) => (
             <li key={i.id} className="flex items-baseline justify-between gap-4 px-5 py-4">
               <div>
-                <p className="font-display text-[15px] uppercase leading-tight">{i.productName}</p>
+                <p className="text-[16px] font-bold leading-snug">{i.productName}</p>
                 <p className="mt-1 text-[13px] font-medium text-grafite">
                   {i.qty} {abrevUnidade(i.unit)}
                   {i.size ? ` · ${i.size}` : ""}

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/prisma";
 import { brl, abrevUnidade, unidade } from "@/lib/format";
 import { Configurador } from "@/components/Configurador";
+import { Ilustra, tipoPorNome } from "@/components/Ilustra";
 
 export const dynamic = "force-dynamic";
 
@@ -56,10 +57,10 @@ export default async function PaginaProduto({ params }: { params: Promise<{ slug
               // eslint-disable-next-line @next/next/no-img-element
               <img src={produto.imageUrl} alt={produto.name} className="h-full w-full object-cover" />
             ) : (
-              <div className="flex h-full items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo-redondo.png" alt="" className="h-28 w-28 opacity-15" />
-              </div>
+              <Ilustra
+                tipo={tipoPorNome(`${produto.name} ${produto.slug}`)}
+                className="h-full w-full"
+              />
             )}
           </div>
 

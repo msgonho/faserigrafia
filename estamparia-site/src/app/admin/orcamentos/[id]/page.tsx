@@ -48,7 +48,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
             {o.items.map((i) => (
               <li key={i.id} className="p-5">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
-                  <p className="font-display text-[16px] uppercase leading-tight">{i.productName}</p>
+                  <p className="text-[17px] font-bold leading-snug">{i.productName}</p>
                   <p className="font-semibold">
                     {brl(i.subtotal)}
                     <span className="ml-2 font-mono text-[11px] font-normal text-grafite">

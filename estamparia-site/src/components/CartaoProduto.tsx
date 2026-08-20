@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { brl, abrevUnidade } from "@/lib/format";
 import { menorPreco } from "@/lib/pricing";
+import { Ilustra, tipoPorNome } from "./Ilustra";
 
 type Props = {
   produto: {
@@ -22,9 +23,9 @@ export function CartaoProduto({ produto }: Props) {
   return (
     <Link
       href={`/produto/${produto.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-linha bg-white shadow-cartao transition-shadow hover:shadow-alto"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-linha bg-white transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-alto"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-fundo">
+      <div className="relative aspect-[4/3] overflow-hidden">
         {produto.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -33,13 +34,13 @@ export function CartaoProduto({ produto }: Props) {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo-redondo.png" alt="" className="h-20 w-20 opacity-15" />
-          </div>
+          <Ilustra
+            tipo={tipoPorNome(`${produto.name} ${produto.slug}`)}
+            className="h-full w-full transition-transform duration-500 group-hover:scale-105"
+          />
         )}
-        <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2.5 py-1 text-[12px] font-semibold text-tinta shadow-sm">
-          mínimo {produto.minQty} {abrevUnidade(produto.unit)}
+        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[12px] font-semibold text-tinta shadow-sm backdrop-blur">
+          mín. {produto.minQty} {abrevUnidade(produto.unit)}
         </span>
       </div>
 
@@ -50,10 +51,15 @@ export function CartaoProduto({ produto }: Props) {
             {produto.description}
           </p>
         )}
-        <div className="mt-5 flex items-baseline gap-1.5 border-t border-linha pt-4">
-          <span className="text-[13px] text-cinza">a partir de</span>
-          <span className="text-[20px] font-bold text-tinta">{brl(desde)}</span>
-          <span className="text-[13px] text-cinza">/{abrevUnidade(produto.unit)}</span>
+        <div className="mt-auto flex items-end justify-between gap-3 pt-5">
+          <div>
+            <span className="block text-[13px] text-cinza">a partir de</span>
+            <span className="text-[22px] font-bold text-tinta">{brl(desde)}</span>
+            <span className="text-[13px] text-cinza">/{abrevUnidade(produto.unit)}</span>
+          </div>
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-fundo text-azul transition-colors group-hover:bg-azul group-hover:text-white">
+            →
+          </span>
         </div>
       </div>
     </Link>

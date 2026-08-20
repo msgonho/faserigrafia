@@ -89,7 +89,7 @@ export function FormularioOrcamento() {
           {itens.map((i) => (
             <li key={i.uid} className="flex gap-4 p-5">
               <div className="flex-1">
-                <p className="font-display text-[15px] uppercase leading-tight">{i.nome}</p>
+                <p className="text-[16px] font-bold leading-snug">{i.nome}</p>
                 <p className="mt-1.5 text-[13px] font-medium text-grafite">
                   {i.qtd} {abrevUnidade(i.unit)} × {brl(i.precoUnit)}
                 </p>
