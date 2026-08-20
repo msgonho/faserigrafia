@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+enum Unit {
+  UNIDADE
+  METRO
+  PECA
+}
+
+enum OptionType {
+  TAMANHO
+  COR
+}
+
+enum QuoteStatus {
+  NOVO
+  ORCADO
+  APROVADO
+  PRODUCAO
+  ENTREGUE
+  CANCELADO
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(STAFF)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  position    Int       @default(0)
+  products    Product[]
+}
+
+model Product {
+  id            String          @id @default(cuid())
+  name          String
+  slug          String          @unique
+  description   String?
+  imageUrl      String?
+  categoryId    String
+  category      Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  unit          Unit            @default(UNIDADE)
+  basePrice     Float           @default(0)
+  minQty        Int             @default(1)
+  active        Boolean         @default(true)
+  askPrintSides Boolean         @default(false)
+  askDimensions Boolean         @default(false)
+  position      Int             @default(0)
+  createdAt     DateTime        @default(now())
+  tiers         PriceTier[]
+  options       ProductOption[]
+  items         QuoteItem[]
+}
+
+model PriceTier {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  minQty    Int
+  price     Float
+}
+
+model ProductOption {
+  id         String     @id @default(cuid())
+  productId  String
+  product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type       OptionType
+  label      String
+  extraPrice Float      @default(0)
+  position   Int        @default(0)
+}
+
+model Quote {
+  id             String      @id @default(cuid())
+  code           String      @unique
+  customerName   String
+  phone          String
+  email          String?
+  company        String?
+  city           String?
+  deadline       String?
+  notes          String?
+  status         QuoteStatus @default(NOVO)
+  estimatedTotal Float       @default(0)
+  quotedTotal    Float?
+  internalNotes  String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  items          QuoteItem[]
+}
+
+model QuoteItem {
+  id          String   @id @default(cuid())
+  quoteId     String
+  quote       Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product? @relation(fields: [productId], references: [id])
+  productName String
+  unit        Unit     @default(UNIDADE)
+  qty         Int      @default(1)
+  size        String?
+  color       String?
+  sides       String?
+  widthCm     Float?
+  heightCm    Float?
+  artUrl      String?
+  notes       String?
+  unitPrice   Float    @default(0)
+  subtotal    Float    @default(0)
+}
+
+model Setting {
+  key   String @id
+  value String
+}
