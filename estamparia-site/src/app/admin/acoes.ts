@@ -227,7 +227,7 @@ export async function excluirUsuario(form: FormData) {
 
 export async function salvarAjustes(form: FormData) {
   await exigirSessao();
-  const campos = ["nomeEmpresa", "whatsapp", "email", "cidade", "prazoPadrao", "chamada"];
+  const campos = ["nomeEmpresa", "whatsapp", "telefone", "email", "endereco", "cidade", "horario", "prazoPadrao"];
   for (const key of campos) {
     const value = String(form.get(key) || "");
     await db.setting.upsert({ where: { key }, update: { value }, create: { key, value } });

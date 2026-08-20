@@ -6,9 +6,12 @@ export const dynamic = "force-dynamic";
 const campos = [
   { nome: "nomeEmpresa", rotulo: "Nome da estamparia", dica: "Aparece no rodapé e no título das páginas." },
   { nome: "chamada", rotulo: "Frase da página inicial", dica: "Duas frases curtas separadas por ponto — a primeira sai estampada em destaque." },
-  { nome: "whatsapp", rotulo: "WhatsApp", dica: "Só números, com código do país: 5511999999999." },
+  { nome: "whatsapp", rotulo: "WhatsApp (só números)", dica: "Com código do país e DDD: 5514997001911." },
+  { nome: "telefone", rotulo: "Telefone para exibir", dica: "Do jeito que você quer que apareça: (14) 99700-1911." },
   { nome: "email", rotulo: "E-mail de contato", dica: "" },
+  { nome: "endereco", rotulo: "Endereço completo", dica: "Aparece no rodapé e monta o mapa da página de contato." },
   { nome: "cidade", rotulo: "Cidade", dica: "" },
+  { nome: "horario", rotulo: "Horário de atendimento", dica: "" },
   { nome: "prazoPadrao", rotulo: "Prazo padrão", dica: "O que o cliente vê como expectativa antes de fechar." },
 ];
 

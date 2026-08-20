@@ -1,6 +1,6 @@
 import { FormularioOrcamento } from "@/components/FormularioOrcamento";
 
-export const metadata = { title: "Meu orçamento — Estamparia Registro" };
+export const metadata = { title: "Meu orçamento — F&A Serigrafia" };
 
 export default function PaginaOrcamento() {
   return (

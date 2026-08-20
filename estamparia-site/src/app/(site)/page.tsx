@@ -215,7 +215,7 @@ export default async function Home() {
       </section>
 
       {/* Como funciona */}
-      <section id="como-funciona" className="malha py-16 text-white md:py-20">
+      <section className="malha py-16 text-white md:py-20">
         <div className="mx-auto max-w-6xl px-5">
           <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-[#29ABE2]">
             Passo a passo
@@ -236,6 +236,46 @@ export default async function Home() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* Calculadora */}
+      <section className="mx-auto max-w-6xl px-5 pb-4">
+        <div className="overflow-hidden rounded-3xl border border-linha bg-white">
+          <div className="grid gap-8 p-8 md:grid-cols-[1.1fr_.9fr] md:items-center md:p-12">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-magenta/10 px-3 py-1 text-[13px] font-bold text-magenta">
+                Só aqui
+              </span>
+              <h2 className="mt-4 text-[clamp(1.6rem,3.6vw,2.3rem)]">
+                Descubra quanto da sua arte cabe em 1 metro de DTF
+              </h2>
+              <p className="mt-4 max-w-lg text-[16px] leading-relaxed text-grafite">
+                Suba o arquivo, informe o tamanho da estampa e veja o encaixe real no rolo de 58 cm.
+                A calculadora testa as duas posições, mostra o aproveitamento e já dá o valor.
+              </p>
+              <Link href="/calculadora-dtf" className="botao mt-7">
+                Abrir a calculadora
+              </Link>
+            </div>
+            <div className="rounded-2xl border border-linha bg-fundo p-6">
+              <div className="grid grid-cols-3 gap-2">
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="aspect-[3/4] rounded-md border-2"
+                    style={{
+                      borderColor: cores[i % 4],
+                      background: `${cores[i % 4]}22`,
+                    }}
+                  />
+                ))}
+              </div>
+              <p className="mt-4 text-center text-[13px] font-medium text-grafite">
+                9 artes de 18 × 24 cm = 1 metro de rolo
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

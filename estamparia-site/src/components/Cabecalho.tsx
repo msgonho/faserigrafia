@@ -8,10 +8,9 @@ import { Logo } from "./Registro";
 
 const links = [
   { href: "/catalogo", texto: "Catálogo" },
-  { href: "/catalogo?cat=camisetas", texto: "Camisetas" },
-  { href: "/catalogo?cat=dtf", texto: "DTF por metro" },
-  { href: "/catalogo?cat=brindes", texto: "Brindes" },
-  { href: "/#como-funciona", texto: "Como funciona" },
+  { href: "/calculadora-dtf", texto: "Calculadora de DTF", destaque: true },
+  { href: "/como-funciona", texto: "Como funciona" },
+  { href: "/contato", texto: "Contato" },
 ];
 
 export function Cabecalho() {
@@ -32,9 +31,16 @@ export function Cabecalho() {
             <Link
               key={l.texto}
               href={l.href}
-              className="text-[15px] font-medium text-grafite transition-colors hover:text-azul"
+              className={`text-[15px] font-medium transition-colors hover:text-azul ${
+                l.destaque ? "text-azul" : "text-grafite"
+              }`}
             >
               {l.texto}
+              {l.destaque && (
+                <span className="ml-1.5 rounded-full bg-magenta px-1.5 py-0.5 align-middle text-[10px] font-bold text-white">
+                  novo
+                </span>
+              )}
             </Link>
           ))}
         </nav>

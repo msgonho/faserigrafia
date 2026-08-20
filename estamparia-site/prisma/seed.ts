@@ -183,15 +183,28 @@ async function main() {
   });
 
   const settings: Record<string, string> = {
-    nomeEmpresa: "Estamparia Registro",
-    whatsapp: "5511999999999",
-    email: "contato@estamparia.com.br",
-    cidade: "São Paulo, SP",
+    nomeEmpresa: "F&A Serigrafia e Estamparia",
+    whatsapp: "5514997001911",
+    telefone: "(14) 99700-1911",
+    email: "f.a_serigrafia@hotmail.com",
+    endereco: "R. Cornélio Pires, 428 - Centro, Botucatu - SP, 18600-370",
+    cidade: "Botucatu, SP",
+    horario: "Segunda a sexta, 8h às 18h · Sábado, 8h às 12h",
     prazoPadrao: "5 a 7 dias úteis após aprovação da arte",
-    chamada: "Tira da cabeça. Coloca na camiseta.",
   };
+
+  // Grava os dados reais uma única vez; depois disso, o que valer é o que
+  // estiver no painel — o seed não sobrescreve mais nada.
+  const marca = await db.setting.findUnique({ where: { key: "ajustesReais" } });
   for (const [key, value] of Object.entries(settings)) {
-    await db.setting.upsert({ where: { key }, update: {}, create: { key, value } });
+    if (marca) {
+      await db.setting.upsert({ where: { key }, update: {}, create: { key, value } });
+    } else {
+      await db.setting.upsert({ where: { key }, update: { value }, create: { key, value } });
+    }
+  }
+  if (!marca) {
+    await db.setting.create({ data: { key: "ajustesReais", value: "1" } });
   }
 
   for (const c of categorias) {
