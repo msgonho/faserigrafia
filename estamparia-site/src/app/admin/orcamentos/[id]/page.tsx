@@ -52,7 +52,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
                   <p className="font-semibold">
                     {brl(i.subtotal)}
                     <span className="ml-2 font-mono text-[11px] font-normal text-grafite">
-                      {i.qtd} {abrevUnidade(i.unit)} × {brl(i.unitPrice)}
+                      {i.qty} {abrevUnidade(i.unit)} × {brl(i.unitPrice)}
                     </span>
                   </p>
                 </div>
