@@ -38,7 +38,7 @@ export default async function Enviado({ params }: { params: Promise<{ code: stri
               <div>
                 <p className="font-display text-[15px] uppercase leading-tight">{i.productName}</p>
                 <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">
-                  {i.qtd} {abrevUnidade(i.unit)}
+                  {i.qty} {abrevUnidade(i.unit)}
                   {i.size ? ` · ${i.size}` : ""}
                   {i.color ? ` · ${i.color}` : ""}
                 </p>
