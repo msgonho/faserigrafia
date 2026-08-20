@@ -35,7 +35,7 @@ export default async function Categorias() {
                         className="campo w-16 text-center font-mono"
                         aria-label="Ordem"
                       />
-                      <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">
+                      <span className="text-[13px] font-medium text-grafite">
                         {c._count.products} prod.
                       </span>
                     </div>
@@ -53,7 +53,7 @@ export default async function Categorias() {
 
                   <form action={excluirCategoria} className="mt-2">
                     <input type="hidden" name="id" value={c.id} />
-                    <button className="font-mono text-[11px] uppercase tracking-[0.1em] text-grafite hover:text-magenta">
+                    <button className="text-[13px] font-medium text-grafite hover:text-azul">
                       excluir categoria
                       {c._count.products > 0 ? ` e ${c._count.products} produto(s)` : ""}
                     </button>
@@ -64,7 +64,7 @@ export default async function Categorias() {
           )}
         </div>
 
-        <form action={salvarCategoria} className="border border-tinta bg-white">
+        <form action={salvarCategoria} className="border border-linha bg-white">
           <p className="rotulo border-b border-linha px-5 py-3">Nova categoria</p>
           <div className="space-y-4 p-5">
             <div>

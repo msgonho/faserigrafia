@@ -37,8 +37,8 @@ export default async function ListaOrcamentos({
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <Link
           href="/admin/orcamentos"
-          className={`px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] ${
-            !status ? "bg-tinta text-papel" : "border border-linha text-grafite hover:border-tinta"
+          className={`px-3 py-2 text-[13px] font-medium ${
+            !status ? "bg-tinta text-white" : "border border-linha text-grafite hover:border-tinta"
           }`}
         >
           Todos
@@ -47,9 +47,9 @@ export default async function ListaOrcamentos({
           <Link
             key={chave}
             href={`/admin/orcamentos?status=${chave}`}
-            className={`px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] ${
+            className={`px-3 py-2 text-[13px] font-medium ${
               status === chave
-                ? "bg-tinta text-papel"
+                ? "bg-tinta text-white"
                 : "border border-linha text-grafite hover:border-tinta"
             }`}
           >
@@ -79,8 +79,8 @@ export default async function ListaOrcamentos({
       ) : (
         <div className="mt-8 overflow-x-auto border border-linha bg-white">
           <table className="w-full min-w-[720px] text-left text-sm">
-            <thead className="border-b border-linha bg-papel">
-              <tr className="font-mono text-[10px] uppercase tracking-[0.14em] text-grafite">
+            <thead className="border-b border-linha bg-fundo">
+              <tr className="text-[12px] font-semibold text-grafite">
                 <th className="px-4 py-3">Código</th>
                 <th className="px-4 py-3">Cliente</th>
                 <th className="px-4 py-3">Itens</th>
@@ -91,14 +91,14 @@ export default async function ListaOrcamentos({
             </thead>
             <tbody className="divide-y divide-linha">
               {orcamentos.map((o) => (
-                <tr key={o.id} className="transition-colors hover:bg-papel">
+                <tr key={o.id} className="transition-colors hover:bg-fundo">
                   <td className="px-4 py-3 font-mono text-[12px]">
-                    <Link href={`/admin/orcamentos/${o.id}`} className="hover:text-magenta">
+                    <Link href={`/admin/orcamentos/${o.id}`} className="hover:text-azul">
                       {o.code}
                     </Link>
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/admin/orcamentos/${o.id}`} className="font-medium hover:text-magenta">
+                    <Link href={`/admin/orcamentos/${o.id}`} className="font-medium hover:text-azul">
                       {o.customerName}
                     </Link>
                     {o.company && <span className="block text-[12px] text-grafite">{o.company}</span>}

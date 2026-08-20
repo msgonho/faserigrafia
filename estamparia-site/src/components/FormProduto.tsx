@@ -45,7 +45,7 @@ export function FormProduto({
 
         {/* Identificação */}
         <div className="space-y-6">
-          <fieldset className="border border-tinta bg-white">
+          <fieldset className="border border-linha bg-white">
             <legend className="rotulo px-5">O que é</legend>
             <div className="space-y-4 p-5 pt-2">
               <div>
@@ -120,7 +120,7 @@ export function FormProduto({
           </fieldset>
 
           {/* Faixas de preço */}
-          <fieldset className="border border-tinta bg-white">
+          <fieldset className="border border-linha bg-white">
             <legend className="rotulo px-5">Preço por quantidade</legend>
             <div className="space-y-3 p-5 pt-2">
               <p className="text-[13px] leading-relaxed text-grafite">
@@ -130,7 +130,7 @@ export function FormProduto({
 
               {faixas.map((f, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">
+                  <span className="text-[13px] font-medium text-grafite">
                     a partir de
                   </span>
                   <input
@@ -140,7 +140,7 @@ export function FormProduto({
                     onChange={(e) => alterarFaixa(i, "minQty", e.target.value)}
                     className="campo w-20 text-center font-mono"
                   />
-                  <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">
+                  <span className="text-[13px] font-medium text-grafite">
                     sai a R$
                   </span>
                   <input
@@ -153,7 +153,7 @@ export function FormProduto({
                   <button
                     type="button"
                     onClick={() => setFaixas((atual) => atual.filter((_, idx) => idx !== i))}
-                    className="ml-auto font-mono text-[11px] uppercase tracking-[0.1em] text-grafite hover:text-magenta"
+                    className="ml-auto text-[13px] font-medium text-grafite hover:text-azul"
                   >
                     remover
                   </button>
@@ -171,7 +171,7 @@ export function FormProduto({
           </fieldset>
 
           {/* Opções */}
-          <fieldset className="border border-tinta bg-white">
+          <fieldset className="border border-linha bg-white">
             <legend className="rotulo px-5">Opções que o cliente escolhe</legend>
             <div className="space-y-4 p-5 pt-2">
               <div>
@@ -209,7 +209,7 @@ export function FormProduto({
 
         {/* Regras e publicação */}
         <div className="space-y-6 lg:sticky lg:top-24">
-          <fieldset className="border border-tinta bg-white">
+          <fieldset className="border border-linha bg-white">
             <legend className="rotulo px-5">Como é vendido</legend>
             <div className="space-y-4 p-5 pt-2">
               <div>
@@ -265,7 +265,7 @@ export function FormProduto({
             </div>
           </fieldset>
 
-          <fieldset className="border border-tinta bg-white">
+          <fieldset className="border border-linha bg-white">
             <legend className="rotulo px-5">O que perguntar no pedido</legend>
             <div className="space-y-3 p-5 pt-2">
               {[
@@ -295,7 +295,7 @@ export function FormProduto({
       {produto && (
         <form action={excluirProduto} className="mt-6 text-right">
           <input type="hidden" name="id" value={produto.id} />
-          <button className="font-mono text-[11px] uppercase tracking-[0.12em] text-grafite hover:text-magenta">
+          <button className="text-[13px] font-medium text-grafite hover:text-azul">
             excluir produto
           </button>
         </form>

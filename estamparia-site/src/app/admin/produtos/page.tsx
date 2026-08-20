@@ -43,8 +43,8 @@ export default async function ListaProdutos() {
       ) : (
         <div className="mt-8 overflow-x-auto border border-linha bg-white">
           <table className="w-full min-w-[820px] text-left text-sm">
-            <thead className="border-b border-linha bg-papel">
-              <tr className="font-mono text-[10px] uppercase tracking-[0.14em] text-grafite">
+            <thead className="border-b border-linha bg-fundo">
+              <tr className="text-[12px] font-semibold text-grafite">
                 <th className="px-4 py-3">Produto</th>
                 <th className="px-4 py-3">Categoria</th>
                 <th className="px-4 py-3 text-right">Preço base</th>
@@ -56,9 +56,9 @@ export default async function ListaProdutos() {
             </thead>
             <tbody className="divide-y divide-linha">
               {produtos.map((p) => (
-                <tr key={p.id} className="transition-colors hover:bg-papel">
+                <tr key={p.id} className="transition-colors hover:bg-fundo">
                   <td className="px-4 py-3">
-                    <Link href={`/admin/produtos/${p.id}`} className="font-medium hover:text-magenta">
+                    <Link href={`/admin/produtos/${p.id}`} className="font-medium hover:text-azul">
                       {p.name}
                     </Link>
                     <span className="block font-mono text-[11px] text-grafite">/{p.slug}</span>
@@ -76,8 +76,8 @@ export default async function ListaProdutos() {
                     <form action={alternarProduto}>
                       <input type="hidden" name="id" value={p.id} />
                       <button
-                        className={`px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] ${
-                          p.active ? "bg-tinta text-papel" : "border border-linha text-grafite"
+                        className={`px-2 py-1 text-[12px] font-semibold ${
+                          p.active ? "bg-tinta text-white" : "border border-linha text-grafite"
                         }`}
                       >
                         {p.active ? "publicado" : "oculto"}
@@ -87,7 +87,7 @@ export default async function ListaProdutos() {
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/admin/produtos/${p.id}`}
-                      className="font-mono text-[11px] uppercase tracking-[0.12em] text-grafite hover:text-magenta"
+                      className="text-[13px] font-medium text-grafite hover:text-azul"
                     >
                       editar
                     </Link>

@@ -4,9 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useCarrinho } from "./CarrinhoProvider";
+import { Logo } from "./Registro";
 
 const links = [
   { href: "/catalogo", texto: "Catálogo" },
+  { href: "/catalogo?cat=camisetas", texto: "Camisetas" },
   { href: "/catalogo?cat=dtf", texto: "DTF por metro" },
   { href: "/catalogo?cat=brindes", texto: "Brindes" },
   { href: "/#como-funciona", texto: "Como funciona" },
@@ -18,23 +20,19 @@ export function Cabecalho() {
   const caminho = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-tinta bg-papel/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center gap-6 px-5 py-3.5">
-        <Link href="/" className="flex items-center gap-2.5" onClick={() => setAberto(false)}>
-          <span className="flex h-7 w-7 items-center justify-center bg-tinta">
-            <span className="block h-2.5 w-2.5 rounded-full bg-magenta" />
-          </span>
-          <span className="font-display text-[15px] uppercase leading-none tracking-tight">
-            Registro
-          </span>
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <div className="barra-cmyk rounded-none" style={{ height: 4 }} />
+      <div className="mx-auto flex max-w-6xl items-center gap-6 px-5 py-3">
+        <Link href="/" onClick={() => setAberto(false)} className="shrink-0">
+          <Logo className="h-11 w-auto md:h-12" />
         </Link>
 
-        <nav className="ml-auto hidden items-center gap-6 md:flex">
+        <nav className="ml-auto hidden items-center gap-7 lg:flex">
           {links.map((l) => (
             <Link
               key={l.texto}
               href={l.href}
-              className="font-mono text-[11px] uppercase tracking-[0.14em] text-grafite transition-colors hover:text-magenta"
+              className="text-[15px] font-medium text-grafite transition-colors hover:text-azul"
             >
               {l.texto}
             </Link>
@@ -43,38 +41,39 @@ export function Cabecalho() {
 
         <Link
           href="/orcamento"
-          className={`ml-auto flex items-center gap-2 border px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors md:ml-0 ${
+          className={`ml-auto flex shrink-0 items-center gap-2 rounded-lg px-4 py-2.5 text-[14px] font-semibold transition-colors lg:ml-0 ${
             caminho === "/orcamento"
-              ? "border-magenta bg-magenta text-white"
-              : "border-tinta text-tinta hover:bg-tinta hover:text-papel"
+              ? "bg-tinta text-white"
+              : "bg-azul text-white hover:bg-[#155e96]"
           }`}
         >
-          Meu orçamento
-          <span className="flex h-5 min-w-5 items-center justify-center bg-magenta px-1 text-white">
+          <span className="hidden sm:inline">Meu orçamento</span>
+          <span className="sm:hidden">Orçamento</span>
+          <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-white/25 px-1.5 text-[13px]">
             {pronto ? quantidade : 0}
           </span>
         </Link>
 
         <button
           onClick={() => setAberto((a) => !a)}
-          className="md:hidden"
+          className="shrink-0 lg:hidden"
           aria-label="Abrir menu"
           aria-expanded={aberto}
         >
-          <span className="block h-[2px] w-6 bg-tinta" />
-          <span className="mt-1.5 block h-[2px] w-6 bg-tinta" />
-          <span className="mt-1.5 block h-[2px] w-4 bg-tinta" />
+          <span className="block h-[2px] w-6 rounded bg-tinta" />
+          <span className="mt-1.5 block h-[2px] w-6 rounded bg-tinta" />
+          <span className="mt-1.5 block h-[2px] w-6 rounded bg-tinta" />
         </button>
       </div>
 
       {aberto && (
-        <nav className="border-t border-linha bg-papel px-5 py-3 md:hidden">
+        <nav className="border-t border-linha bg-white px-5 py-2 lg:hidden">
           {links.map((l) => (
             <Link
               key={l.texto}
               href={l.href}
               onClick={() => setAberto(false)}
-              className="block py-2.5 font-mono text-[12px] uppercase tracking-[0.14em] text-grafite"
+              className="block border-b border-linha py-3 text-[15px] font-medium text-grafite last:border-0"
             >
               {l.texto}
             </Link>

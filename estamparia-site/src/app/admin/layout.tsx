@@ -2,6 +2,7 @@ import Link from "next/link";
 import { exigirSessao } from "@/lib/auth";
 import { sair } from "./acoes";
 import { NavAdmin } from "@/components/NavAdmin";
+import { Logo } from "@/components/Registro";
 
 export const dynamic = "force-dynamic";
 
@@ -9,14 +10,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const sessao = await exigirSessao();
 
   return (
-    <div className="min-h-screen bg-papel">
-      <header className="sticky top-0 z-40 border-b border-tinta bg-tinta text-papel">
+    <div className="min-h-screen bg-fundo">
+      <header className="sticky top-0 z-40 border-b border-tinta bg-tinta text-white">
         <div className="mx-auto flex max-w-7xl items-center gap-6 px-5 py-3">
-          <Link href="/admin" className="flex items-center gap-2.5">
-            <span className="flex h-6 w-6 items-center justify-center bg-papel">
-              <span className="block h-2 w-2 rounded-full bg-magenta" />
+          <Link href="/admin" className="flex shrink-0 items-center gap-3">
+            <span className="rounded-md bg-white px-2 py-1">
+              <Logo className="h-6 w-auto" />
             </span>
-            <span className="font-display text-[13px] uppercase leading-none">Painel</span>
+            <span className="hidden text-[14px] font-semibold sm:block">Painel</span>
           </Link>
 
           <NavAdmin />
@@ -25,15 +26,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link
               href="/"
               target="_blank"
-              className="hidden font-mono text-[11px] uppercase tracking-[0.14em] text-papel/50 hover:text-amarelo sm:block"
+              className="hidden text-[14px] font-medium text-white/70 hover:text-ciano sm:block"
             >
               ver site ↗
             </Link>
-            <span className="hidden font-mono text-[11px] uppercase tracking-[0.14em] text-papel/50 md:block">
+            <span className="hidden text-[14px] font-medium text-white/70 md:block">
               {sessao.nome}
             </span>
             <form action={sair}>
-              <button className="font-mono text-[11px] uppercase tracking-[0.14em] text-papel/50 hover:text-magenta">
+              <button className="text-[14px] font-medium text-white/70 hover:text-azul">
                 sair
               </button>
             </form>

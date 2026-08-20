@@ -1,27 +1,26 @@
+/** Destaque de texto usando o azul da marca. */
 export function Registro({
   children,
   className = "",
-  animar = true,
 }: {
   children: React.ReactNode;
   className?: string;
   animar?: boolean;
 }) {
+  return <span className={`text-azul ${className}`}>{children}</span>;
+}
+
+/** Logotipo F&A, nas duas versões. */
+export function Logo({
+  variante = "horizontal",
+  className = "",
+}: {
+  variante?: "horizontal" | "redondo";
+  className?: string;
+}) {
+  const src = variante === "redondo" ? "/logo-redondo.png" : "/logo-horizontal.png";
   return (
-    <span className={`registro ${className}`}>
-      <span
-        aria-hidden="true"
-        className={`chapa text-ciano ${animar ? "chapa-c" : "translate-x-[-5px] translate-y-[4px]"}`}
-      >
-        {children}
-      </span>
-      <span
-        aria-hidden="true"
-        className={`chapa text-amarelo ${animar ? "chapa-y" : "translate-x-[5px] translate-y-[-4px]"}`}
-      >
-        {children}
-      </span>
-      <span className="tinta-preta">{children}</span>
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt="F&A Serigrafia e Estamparia" className={className} />
   );
 }

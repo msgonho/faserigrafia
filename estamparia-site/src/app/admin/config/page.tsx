@@ -23,7 +23,7 @@ export default async function Config() {
         O que você mudar aqui aparece no site na hora, sem precisar mexer em código.
       </p>
 
-      <form action={salvarAjustes} className="mt-8 max-w-2xl border border-tinta bg-white">
+      <form action={salvarAjustes} className="mt-8 max-w-2xl border border-linha bg-white">
         <div className="space-y-5 p-6">
           {campos.map((c) => (
             <div key={c.nome}>

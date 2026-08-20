@@ -37,8 +37,8 @@ export default async function Enviado({ params }: { params: Promise<{ code: stri
             <li key={i.id} className="flex items-baseline justify-between gap-4 px-5 py-4">
               <div>
                 <p className="font-display text-[15px] uppercase leading-tight">{i.productName}</p>
-                <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">
-                  {i.qty} {abrevUnidade(i.unit)}
+                <p className="mt-1 text-[13px] font-medium text-grafite">
+                  {i.qtd} {abrevUnidade(i.unit)}
                   {i.size ? ` · ${i.size}` : ""}
                   {i.color ? ` · ${i.color}` : ""}
                 </p>
@@ -47,7 +47,7 @@ export default async function Enviado({ params }: { params: Promise<{ code: stri
             </li>
           ))}
         </ul>
-        <div className="flex items-baseline justify-between border-t border-tinta bg-papel px-5 py-4">
+        <div className="flex items-baseline justify-between border-t border-tinta bg-fundo px-5 py-4">
           <span className="rotulo">Estimativa</span>
           <span className="font-display text-2xl">{brl(orcamento.estimatedTotal)}</span>
         </div>

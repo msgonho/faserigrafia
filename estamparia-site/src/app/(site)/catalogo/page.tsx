@@ -34,8 +34,8 @@ export default async function Catalogo({
       <nav className="mt-8 flex flex-wrap gap-2 border-b border-linha pb-6">
         <Link
           href="/catalogo"
-          className={`px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors ${
-            !cat ? "bg-tinta text-papel" : "border border-linha text-grafite hover:border-tinta"
+          className={`px-3 py-2 text-[13px] font-medium transition-colors ${
+            !cat ? "bg-tinta text-white" : "border border-linha text-grafite hover:border-tinta"
           }`}
         >
           Todos
@@ -44,9 +44,9 @@ export default async function Catalogo({
           <Link
             key={c.id}
             href={`/catalogo?cat=${c.slug}`}
-            className={`px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors ${
+            className={`px-3 py-2 text-[13px] font-medium transition-colors ${
               cat === c.slug
-                ? "bg-tinta text-papel"
+                ? "bg-tinta text-white"
                 : "border border-linha text-grafite hover:border-tinta"
             }`}
           >

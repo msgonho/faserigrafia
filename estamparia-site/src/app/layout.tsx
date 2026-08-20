@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { Archivo_Black, Inter, JetBrains_Mono } from "next/font/google";
+import { Archivo, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { CarrinhoProvider } from "@/components/CarrinhoProvider";
 
-const display = Archivo_Black({ subsets: ["latin"], weight: "400", variable: "--font-display" });
+const display = Archivo({ subsets: ["latin"], variable: "--font-display" });
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "Estamparia Registro — camisetas, DTF e brindes",
+  title: "F&A Serigrafia — camisetas, DTF e brindes personalizados",
   description:
-    "Monte seu pedido e receba o orçamento com preço fechado: camisetas em silk e DTF, DTF por metro e brindes personalizados.",
+    "Peça seu orçamento online: camisetas em silk e DTF, DTF por metro, uniformes e brindes personalizados.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

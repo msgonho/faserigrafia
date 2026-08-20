@@ -25,7 +25,7 @@ export default async function EditarProduto({ params }: { params: Promise<{ id: 
     <>
       <Link
         href="/admin/produtos"
-        className="font-mono text-[11px] uppercase tracking-[0.14em] text-grafite hover:text-magenta"
+        className="text-[13px] font-medium text-grafite hover:text-azul"
       >
         ← produtos
       </Link>

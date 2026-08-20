@@ -19,8 +19,8 @@ export default async function Usuarios() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-start">
         <div className="overflow-x-auto border border-linha bg-white">
           <table className="w-full min-w-[560px] text-left text-sm">
-            <thead className="border-b border-linha bg-papel">
-              <tr className="font-mono text-[10px] uppercase tracking-[0.14em] text-grafite">
+            <thead className="border-b border-linha bg-fundo">
+              <tr className="text-[12px] font-semibold text-grafite">
                 <th className="px-4 py-3">Pessoa</th>
                 <th className="px-4 py-3">Acesso</th>
                 <th className="px-4 py-3">Desde</th>
@@ -35,14 +35,14 @@ export default async function Usuarios() {
                     <td className="px-4 py-3">
                       <span className="font-medium">{u.name}</span>
                       {ehVoce && (
-                        <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.12em] text-magenta">
+                        <span className="ml-2 text-[12px] font-semibold text-magenta">
                           você
                         </span>
                       )}
                       <span className="block text-[12px] text-grafite">{u.email}</span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-grafite">
+                      <span className="text-[13px] font-medium text-grafite">
                         {u.role === "ADMIN" ? "administrador" : "produção"}
                       </span>
                     </td>
@@ -54,8 +54,8 @@ export default async function Usuarios() {
                             <form action={alternarUsuario}>
                               <input type="hidden" name="id" value={u.id} />
                               <button
-                                className={`px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] ${
-                                  u.active ? "bg-tinta text-papel" : "border border-linha text-grafite"
+                                className={`px-2 py-1 text-[12px] font-semibold ${
+                                  u.active ? "bg-tinta text-white" : "border border-linha text-grafite"
                                 }`}
                               >
                                 {u.active ? "ativo" : "bloqueado"}
@@ -63,7 +63,7 @@ export default async function Usuarios() {
                             </form>
                             <form action={excluirUsuario}>
                               <input type="hidden" name="id" value={u.id} />
-                              <button className="font-mono text-[10px] uppercase tracking-[0.12em] text-grafite hover:text-magenta">
+                              <button className="text-[12px] font-semibold text-grafite hover:text-azul">
                                 excluir
                               </button>
                             </form>
@@ -78,7 +78,7 @@ export default async function Usuarios() {
           </table>
         </div>
 
-        <form action={salvarUsuario} className="border border-tinta bg-white">
+        <form action={salvarUsuario} className="border border-linha bg-white">
           <p className="rotulo border-b border-linha px-5 py-3">Dar acesso a alguém</p>
           <div className="space-y-4 p-5">
             <div>

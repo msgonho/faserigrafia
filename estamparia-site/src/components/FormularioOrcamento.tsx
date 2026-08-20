@@ -80,7 +80,7 @@ export function FormularioOrcamento() {
           <p className="rotulo">
             {itens.length} {itens.length === 1 ? "item" : "itens"}
           </p>
-          <button onClick={limpar} className="font-mono text-[11px] uppercase tracking-[0.12em] text-grafite hover:text-magenta">
+          <button onClick={limpar} className="text-[13px] font-medium text-grafite hover:text-azul">
             limpar tudo
           </button>
         </div>
@@ -90,7 +90,7 @@ export function FormularioOrcamento() {
             <li key={i.uid} className="flex gap-4 p-5">
               <div className="flex-1">
                 <p className="font-display text-[15px] uppercase leading-tight">{i.nome}</p>
-                <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">
+                <p className="mt-1.5 text-[13px] font-medium text-grafite">
                   {i.qtd} {abrevUnidade(i.unit)} × {brl(i.precoUnit)}
                 </p>
                 <dl className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-grafite">
@@ -120,7 +120,7 @@ export function FormularioOrcamento() {
                 <p className="font-semibold">{brl(i.subtotal)}</p>
                 <button
                   onClick={() => remover(i.uid)}
-                  className="mt-2 font-mono text-[11px] uppercase tracking-[0.1em] text-grafite hover:text-magenta"
+                  className="mt-2 text-[13px] font-medium text-grafite hover:text-azul"
                 >
                   remover
                 </button>
@@ -129,14 +129,14 @@ export function FormularioOrcamento() {
           ))}
         </ul>
 
-        <div className="flex items-baseline justify-between border-t border-tinta bg-papel px-5 py-4">
+        <div className="flex items-baseline justify-between border-t border-tinta bg-fundo px-5 py-4">
           <span className="rotulo">Estimativa total</span>
           <span className="font-display text-2xl">{brl(total)}</span>
         </div>
       </div>
 
       {/* Contato */}
-      <div className="border border-tinta bg-white">
+      <div className="border border-linha bg-white">
         <div className="border-b border-linha px-5 py-3">
           <p className="rotulo">Para onde mandamos a resposta</p>
         </div>

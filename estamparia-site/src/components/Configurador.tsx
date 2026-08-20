@@ -87,7 +87,7 @@ export function Configurador({ produto }: { produto: ProdutoConfig }) {
   }
 
   return (
-    <div className="mt-8 border border-tinta bg-white">
+    <div className="mt-8 border border-linha bg-white">
       <div className="border-b border-linha px-5 py-3">
         <p className="rotulo">Monte seu pedido</p>
       </div>
@@ -102,7 +102,7 @@ export function Configurador({ produto }: { produto: ProdutoConfig }) {
             <button
               type="button"
               onClick={() => ajustar(-passo)}
-              className="border border-r-0 border-linha px-4 text-lg text-grafite hover:bg-papel"
+              className="border border-r-0 border-linha px-4 text-lg text-grafite hover:bg-fundo"
               aria-label="Diminuir quantidade"
             >
               −
@@ -120,17 +120,17 @@ export function Configurador({ produto }: { produto: ProdutoConfig }) {
             <button
               type="button"
               onClick={() => ajustar(passo)}
-              className="border border-l-0 border-linha px-4 text-lg text-grafite hover:bg-papel"
+              className="border border-l-0 border-linha px-4 text-lg text-grafite hover:bg-fundo"
               aria-label="Aumentar quantidade"
             >
               +
             </button>
-            <span className="ml-3 self-center font-mono text-[11px] uppercase tracking-[0.14em] text-grafite">
+            <span className="ml-3 self-center text-[13px] font-medium text-grafite">
               {abrevUnidade(produto.unit)}
             </span>
           </div>
           {abaixoDoMinimo && (
-            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.1em] text-magenta">
+            <p className="mt-2 text-[13px] font-medium text-magenta">
               O mínimo é {produto.minQty} {abrevUnidade(produto.unit)}. Ajuste para continuar.
             </p>
           )}
@@ -189,7 +189,7 @@ export function Configurador({ produto }: { produto: ProdutoConfig }) {
                   aria-pressed={lados === l}
                   className={`border px-3 py-2 text-[13px] transition-colors ${
                     lados === l
-                      ? "border-tinta bg-tinta text-papel"
+                      ? "border-tinta bg-tinta text-white"
                       : "border-linha text-grafite hover:border-tinta"
                   }`}
                 >
@@ -285,12 +285,12 @@ export function Configurador({ produto }: { produto: ProdutoConfig }) {
       </div>
 
       {/* Rodapé de preço */}
-      <div className="border-t border-tinta bg-papel px-5 py-4">
+      <div className="border-t border-tinta bg-fundo px-5 py-4">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="rotulo">Estimativa deste item</p>
             <p className="mt-1 font-display text-3xl">{brl(subtotal)}</p>
-            <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">
+            <p className="mt-1 text-[13px] font-medium text-grafite">
               {brl(precoUnit)} por {abrevUnidade(produto.unit)}
             </p>
           </div>

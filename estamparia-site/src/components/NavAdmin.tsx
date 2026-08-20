@@ -23,8 +23,8 @@ export function NavAdmin() {
           <Link
             key={i.href}
             href={i.href}
-            className={`whitespace-nowrap px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors ${
-              ativo ? "bg-papel text-tinta" : "text-papel/60 hover:text-amarelo"
+            className={`whitespace-nowrap rounded-md px-3 py-1.5 text-[14px] font-medium transition-colors ${
+              ativo ? "bg-white text-tinta" : "text-white/70 hover:text-ciano"
             }`}
           >
             {i.texto}

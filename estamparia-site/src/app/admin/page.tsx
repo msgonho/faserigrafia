@@ -42,14 +42,14 @@ export default async function Inicio() {
           <p className="rotulo">Visão geral</p>
           <h1 className="mt-3 text-3xl">Como está a mesa hoje</h1>
         </div>
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-grafite">
+        <p className="text-[13px] font-medium text-grafite">
           {produtosAtivos} produtos publicados
         </p>
       </div>
 
       <div className="mt-8 grid gap-px border border-tinta bg-tinta sm:grid-cols-2 lg:grid-cols-4">
         {cartoes.map((c) => (
-          <Link key={c.rotulo} href={c.href} className="bg-white p-5 transition-colors hover:bg-papel">
+          <Link key={c.rotulo} href={c.href} className="bg-white p-5 transition-colors hover:bg-fundo">
             <p className="rotulo">{c.rotulo}</p>
             <p
               className={`mt-3 font-display text-4xl leading-none ${
@@ -66,7 +66,7 @@ export default async function Inicio() {
         <h2 className="text-xl">Últimos pedidos</h2>
         <Link
           href="/admin/orcamentos"
-          className="font-mono text-[11px] uppercase tracking-[0.14em] text-grafite hover:text-magenta"
+          className="text-[13px] font-medium text-grafite hover:text-azul"
         >
           ver todos →
         </Link>
@@ -85,7 +85,7 @@ export default async function Inicio() {
             <li key={q.id}>
               <Link
                 href={`/admin/orcamentos/${q.id}`}
-                className="flex flex-wrap items-center gap-4 p-4 transition-colors hover:bg-papel"
+                className="flex flex-wrap items-center gap-4 p-4 transition-colors hover:bg-fundo"
               >
                 <span className="font-mono text-[12px] tracking-[0.1em] text-grafite">{q.code}</span>
                 <span className="font-medium">{q.customerName}</span>

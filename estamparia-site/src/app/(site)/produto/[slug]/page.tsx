@@ -39,24 +39,27 @@ export default async function PaginaProduto({ params }: { params: Promise<{ slug
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-10">
-      <nav className="font-mono text-[11px] uppercase tracking-[0.14em] text-grafite">
-        <Link href="/catalogo" className="hover:text-magenta">
+      <nav className="text-[13px] font-medium text-grafite">
+        <Link href="/catalogo" className="hover:text-azul">
           Catálogo
         </Link>
         <span className="px-2">/</span>
-        <Link href={`/catalogo?cat=${produto.category.slug}`} className="hover:text-magenta">
+        <Link href={`/catalogo?cat=${produto.category.slug}`} className="hover:text-azul">
           {produto.category.name}
         </Link>
       </nav>
 
       <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_1.05fr]">
         <div>
-          <div className="relative aspect-square overflow-hidden border border-tinta bg-white">
+          <div className="relative aspect-square overflow-hidden border border-linha bg-white">
             {produto.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={produto.imageUrl} alt={produto.name} className="h-full w-full object-cover" />
             ) : (
-              <div className="reticula absolute inset-0 text-grafite/40" />
+              <div className="flex h-full items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo-redondo.png" alt="" className="h-28 w-28 opacity-15" />
+              </div>
             )}
           </div>
 

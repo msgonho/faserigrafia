@@ -7,122 +7,85 @@
     -webkit-text-size-adjust: 100%;
   }
   body {
-    @apply bg-papel text-tinta antialiased;
+    @apply bg-white text-tinta antialiased;
+    font-size: 16px;
+    line-height: 1.6;
   }
   ::selection {
-    background: #e5007e;
+    background: #1b75bc;
     color: #fff;
   }
   *:focus-visible {
-    outline: 3px solid #00a3e0;
+    outline: 3px solid #29abe2;
     outline-offset: 2px;
   }
   h1,
   h2,
-  h3 {
-    @apply font-display uppercase leading-[0.92] tracking-[-0.01em];
+  h3,
+  h4 {
+    @apply font-display font-extrabold text-tinta;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
   }
 }
 
 @layer components {
-  /* Marca d'água de retícula: a trama de meio-tom da serigrafia. */
-  .reticula {
-    background-image: radial-gradient(currentColor 1px, transparent 1.3px);
-    background-size: 7px 7px;
+  /* A barra CMYK do logotipo, usada como fio de seção. */
+  .barra-cmyk {
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(
+      90deg,
+      #29abe2 0 25%,
+      #ec008c 25% 50%,
+      #ffc20e 50% 75%,
+      #17181c 75% 100%
+    );
   }
 
   .rotulo {
-    @apply font-mono text-[11px] uppercase tracking-[0.22em] text-grafite;
-  }
-
-  .campo {
-    @apply w-full border border-linha bg-white px-3 py-2 text-sm text-tinta placeholder:text-grafite/60;
-  }
-  .campo:disabled {
-    @apply bg-linha/40 text-grafite;
+    @apply text-[13px] font-semibold uppercase tracking-[0.06em] text-azul;
   }
 
   .rotulo-campo {
-    @apply mb-1.5 block font-mono text-[11px] uppercase tracking-[0.16em] text-grafite;
+    @apply mb-1.5 block text-[14px] font-semibold text-tinta;
+  }
+
+  .campo {
+    @apply w-full rounded-lg border border-linha bg-white px-3.5 py-2.5 text-[15px] text-tinta transition-colors placeholder:text-cinza;
+  }
+  .campo:hover {
+    @apply border-cinza;
+  }
+  .campo:focus {
+    @apply border-azul;
+  }
+  .campo:disabled {
+    @apply bg-fundo text-cinza;
   }
 
   .botao {
-    @apply inline-flex items-center justify-center gap-2 border border-tinta bg-tinta px-5 py-3 font-mono text-[12px] uppercase tracking-[0.16em] text-papel transition-colors;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-azul px-6 py-3 text-[15px] font-semibold text-white shadow-cartao transition-colors;
   }
   .botao:hover {
-    @apply bg-magenta border-magenta;
+    background-color: #155e96;
   }
 
   .botao-vazado {
-    @apply inline-flex items-center justify-center gap-2 border border-tinta bg-transparent px-5 py-3 font-mono text-[12px] uppercase tracking-[0.16em] text-tinta transition-colors;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-linha bg-white px-6 py-3 text-[15px] font-semibold text-tinta transition-colors;
   }
   .botao-vazado:hover {
-    @apply bg-tinta text-papel;
+    @apply border-tinta bg-fundo;
   }
 
   .botao-mini {
-    @apply inline-flex items-center gap-1.5 border border-linha bg-white px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-grafite transition-colors;
+    @apply inline-flex items-center gap-1.5 rounded-md border border-linha bg-white px-3 py-1.5 text-[13px] font-medium text-grafite transition-colors;
   }
   .botao-mini:hover {
-    @apply border-tinta text-tinta;
+    @apply border-cinza text-tinta;
   }
 
-  /* Ficha de produção: a ordem de serviço que fica pendurada na mesa. */
   .ficha {
-    @apply border border-tinta bg-white;
-    box-shadow: 5px 5px 0 rgba(18, 19, 26, 0.1);
-  }
-}
-
-/* Assinatura da casa: o fora de registro do silk. */
-.registro {
-  position: relative;
-  display: inline-block;
-}
-.registro .chapa {
-  position: absolute;
-  inset: 0;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  user-select: none;
-}
-.registro .tinta-preta {
-  position: relative;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .chapa-c {
-    animation: assenta-c 0.85s cubic-bezier(0.16, 0.9, 0.2, 1) both;
-  }
-  .chapa-y {
-    animation: assenta-y 0.85s cubic-bezier(0.16, 0.9, 0.2, 1) 0.06s both;
-  }
-  @keyframes assenta-c {
-    from {
-      transform: translate(-26px, 16px);
-      opacity: 0;
-    }
-    to {
-      transform: translate(-5px, 4px);
-      opacity: 1;
-    }
-  }
-  @keyframes assenta-y {
-    from {
-      transform: translate(24px, -18px);
-      opacity: 0;
-    }
-    to {
-      transform: translate(5px, -4px);
-      opacity: 1;
-    }
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .chapa-c {
-    transform: translate(-5px, 4px);
-  }
-  .chapa-y {
-    transform: translate(5px, -4px);
+    @apply rounded-xl border border-linha bg-white shadow-cartao;
   }
 }

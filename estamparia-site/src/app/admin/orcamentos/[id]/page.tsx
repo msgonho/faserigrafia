@@ -21,7 +21,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
     <>
       <Link
         href="/admin/orcamentos"
-        className="font-mono text-[11px] uppercase tracking-[0.14em] text-grafite hover:text-magenta"
+        className="text-[13px] font-medium text-grafite hover:text-azul"
       >
         ← todos os orçamentos
       </Link>
@@ -29,7 +29,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
       <div className="mt-4 flex flex-wrap items-center gap-4">
         <h1 className="text-3xl">{o.code}</h1>
         <Selo status={o.status} />
-        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-grafite">
+        <span className="text-[13px] font-medium text-grafite">
           recebido em {dataHora(o.createdAt)}
         </span>
       </div>
@@ -52,7 +52,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
                   <p className="font-semibold">
                     {brl(i.subtotal)}
                     <span className="ml-2 font-mono text-[11px] font-normal text-grafite">
-                      {i.qty} {abrevUnidade(i.unit)} × {brl(i.unitPrice)}
+                      {i.qtd} {abrevUnidade(i.unit)} × {brl(i.unitPrice)}
                     </span>
                   </p>
                 </div>
@@ -60,25 +60,25 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
                 <dl className="mt-3 grid gap-x-6 gap-y-1.5 text-[13px] sm:grid-cols-2">
                   {i.size && (
                     <div className="flex gap-2">
-                      <dt className="font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">Tamanho</dt>
+                      <dt className="text-[13px] font-medium text-grafite">Tamanho</dt>
                       <dd>{i.size}</dd>
                     </div>
                   )}
                   {i.color && (
                     <div className="flex gap-2">
-                      <dt className="font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">Cor</dt>
+                      <dt className="text-[13px] font-medium text-grafite">Cor</dt>
                       <dd>{i.color}</dd>
                     </div>
                   )}
                   {i.sides && (
                     <div className="flex gap-2">
-                      <dt className="font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">Estampa</dt>
+                      <dt className="text-[13px] font-medium text-grafite">Estampa</dt>
                       <dd>{i.sides}</dd>
                     </div>
                   )}
                   {i.widthCm && i.heightCm && (
                     <div className="flex gap-2">
-                      <dt className="font-mono text-[11px] uppercase tracking-[0.1em] text-grafite">Medida</dt>
+                      <dt className="text-[13px] font-medium text-grafite">Medida</dt>
                       <dd>
                         {i.widthCm} × {i.heightCm} cm
                       </dd>
@@ -106,7 +106,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
             ))}
           </ul>
 
-          <div className="flex items-baseline justify-between border-t border-tinta bg-papel px-5 py-4">
+          <div className="flex items-baseline justify-between border-t border-tinta bg-fundo px-5 py-4">
             <span className="rotulo">Estimativa do site</span>
             <span className="font-display text-2xl">{brl(o.estimatedTotal)}</span>
           </div>
@@ -114,7 +114,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
 
         {/* Cliente + tratativa */}
         <div className="space-y-6">
-          <div className="border border-tinta bg-white">
+          <div className="border border-linha bg-white">
             <p className="rotulo border-b border-linha px-5 py-3">Cliente</p>
             <dl className="divide-y divide-linha px-5">
               {[
@@ -128,7 +128,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
                 .filter(([, v]) => v)
                 .map(([k, v]) => (
                   <div key={k as string} className="flex items-baseline justify-between gap-4 py-3">
-                    <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-grafite">{k}</dt>
+                    <dt className="text-[13px] font-medium text-grafite">{k}</dt>
                     <dd className="text-right text-[13px] font-medium">{v}</dd>
                   </div>
                 ))}
@@ -150,7 +150,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
             </div>
           </div>
 
-          <form action={atualizarOrcamento} className="border border-tinta bg-white">
+          <form action={atualizarOrcamento} className="border border-linha bg-white">
             <p className="rotulo border-b border-linha px-5 py-3">Tratativa</p>
             <input type="hidden" name="id" value={o.id} />
             <div className="space-y-4 p-5">
@@ -204,7 +204,7 @@ export default async function DetalheOrcamento({ params }: { params: Promise<{ i
 
           <form action={excluirOrcamento} className="text-right">
             <input type="hidden" name="id" value={o.id} />
-            <button className="font-mono text-[11px] uppercase tracking-[0.12em] text-grafite hover:text-magenta">
+            <button className="text-[13px] font-medium text-grafite hover:text-azul">
               excluir este orçamento
             </button>
           </form>

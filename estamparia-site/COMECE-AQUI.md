@@ -10,10 +10,15 @@ Reserve uns 20 minutos.
 O banco é onde ficam guardados os pedidos, os produtos e os preços.
 
 1. Entre em **neon.tech** e crie uma conta (dá para entrar com o Google).
-2. Clique em **Create project**. Dê o nome que quiser e confirme.
-3. Vai aparecer uma caixa chamada **Connection string**, com um texto longo começando
+2. Clique em **Create project**. Dê o nome que quiser.
+3. Em **Region**, escolha **AWS South America (São Paulo)**. Isso deixa o site mais
+   rápido para clientes no Brasil e mantém os dados em território nacional.
+   > Atenção: a região não pode ser trocada depois. As outras opções da lista ficam
+   > nos Estados Unidos, na Europa ou na Ásia.
+4. Confirme a criação.
+5. Vai aparecer uma caixa chamada **Connection string**, com um texto longo começando
    com `postgresql://`. Clique no botão de copiar.
-4. **Cole esse texto num bloco de notas.** Você vai usar daqui a pouco.
+6. **Cole esse texto num bloco de notas.** Você vai usar daqui a pouco.
 
 ---
 
@@ -52,6 +57,9 @@ O GitHub é onde o código fica hospedado. A Vercel lê de lá.
    | `ADMIN_PASSWORD` | a senha que você vai usar para entrar no painel |
 
 5. Clique em **Deploy** e espere de 2 a 4 minutos.
+
+O projeto já vem configurado para rodar no servidor da Vercel em São Paulo, do lado do
+seu banco de dados. Você não precisa mexer em nada para isso.
 
 Pronto. A Vercel monta o banco, cria seu acesso e publica o site. Ela te mostra o
 endereço, algo como `estamparia-site.vercel.app`.
