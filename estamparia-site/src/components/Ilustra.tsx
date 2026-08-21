@@ -170,7 +170,7 @@ function Generico() {
   );
 }
 
-const mapa: Record<TipoIlustra, React.ComponentType> = {
+const mapa: Record<string, () => any> = {
   camiseta: Camiseta,
   moletom: Moletom,
   polo: Polo,
