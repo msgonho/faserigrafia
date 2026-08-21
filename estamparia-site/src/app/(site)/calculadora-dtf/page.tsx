@@ -37,8 +37,8 @@ export default async function PaginaCalculadora() {
             Quanto da sua arte cabe em 1 metro de DTF
           </h1>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-white/70">
-            Suba o arquivo, diga o tamanho que a estampa vai ter na peça e veja o encaixe real no
-            rolo de 58 cm — com a metragem e o valor calculados na hora.
+            Some quantas artes diferentes quiser, informe o tamanho de cada uma e veja o encaixe real
+            no rolo de 58 cm — com a metragem e o valor calculados na hora.
           </p>
         </div>
       </div>
@@ -53,8 +53,8 @@ export default async function PaginaCalculadora() {
               "O DTF é vendido por metro linear de um rolo de 58 cm. Quanto melhor as artes se encaixam lado a lado, menos metro você paga pela mesma quantidade de estampas.",
             ],
             [
-              "Girar a arte economiza",
-              "Uma arte de 20 × 25 cm cabe 2 vezes por fileira em pé, e 2 vezes deitada — mas o comprimento gasto muda. A calculadora testa as duas posições e mostra a mais barata.",
+              "Várias artes na mesma tiragem",
+              "Camiseta da equipe, avental e sacola podem sair do mesmo rolo. Adicione cada arte com seu tamanho e quantidade que o encaixe junta tudo, aproveitando os vãos.",
             ],
             [
               "Sua imagem não sai do navegador",

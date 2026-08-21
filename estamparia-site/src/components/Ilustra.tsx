@@ -1,4 +1,6 @@
-/** Ilustrações vetoriais dos produtos, usadas enquanto não há foto real. */
+import { FOTOS } from "@/lib/fotos";
+
+/** Foto real quando existe; senão, desenho vetorial. */
 
 const C = { ciano: "#29ABE2", magenta: "#EC008C", amarelo: "#FFC20E", azul: "#1B75BC", tinta: "#17181C" };
 
@@ -12,6 +14,12 @@ export type TipoIlustra =
   | "squeeze"
   | "dtf-rolo"
   | "dtf-folha"
+  | "camiseta-vestida"
+  | "camiseta-preta"
+  | "camiseta-cabide"
+  | "camiseta-parede"
+  | "dryfit"
+  | "pilha"
   | "generico";
 
 /** Descobre a ilustração certa a partir do nome/slug do produto. */
@@ -184,6 +192,14 @@ export function Ilustra({
   className?: string;
   fundo?: boolean;
 }) {
+  const foto = FOTOS[tipo];
+  if (foto) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={foto} alt="" className={`object-cover ${className}`} loading="lazy" />
+    );
+  }
+
   const Desenho = mapa[tipo] ?? Generico;
 
   return (

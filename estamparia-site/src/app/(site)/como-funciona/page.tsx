@@ -61,7 +61,7 @@ const etapas = [
 
 const tecnicas = [
   {
-    tipo: "camiseta" as const,
+    tipo: "camiseta-vestida" as const,
     nome: "Serigrafia (silk)",
     quando: "Tiragens médias e grandes com poucas cores",
     pontos: [

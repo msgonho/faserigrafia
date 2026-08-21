@@ -1,5 +1,6 @@
 import { PrismaClient, Unit, OptionType, Role } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { FOTOS } from "../src/lib/fotos";
 
 const db = new PrismaClient();
 
@@ -12,6 +13,7 @@ type Seed = {
   minQty: number;
   askPrintSides?: boolean;
   askDimensions?: boolean;
+  foto?: string;
   tiers?: [number, number][];
   sizes?: [string, number][];
   colors?: [string, number][];
@@ -22,6 +24,7 @@ const catalogo: Record<string, Seed[]> = {
     {
       name: "Camiseta 100% algodão",
       slug: "camiseta-algodao",
+      foto: FOTOS["camiseta"],
       description:
         "Fio 30.1 penteado, gola careca com ribana reforçada. Estampa em silk até 4 cores ou DTF.",
       unit: Unit.UNIDADE,
@@ -35,6 +38,7 @@ const catalogo: Record<string, Seed[]> = {
     {
       name: "Camiseta dry fit",
       slug: "camiseta-dry-fit",
+      foto: FOTOS["dryfit"],
       description:
         "Poliéster com furos, ideal para time, corrida e uniforme de rua. Estampa em sublimação ou DTF.",
       unit: Unit.UNIDADE,
@@ -48,6 +52,7 @@ const catalogo: Record<string, Seed[]> = {
     {
       name: "Camiseta oversized",
       slug: "camiseta-oversized",
+      foto: FOTOS["camiseta-preta"],
       description: "Malha pesada 180g, ombro caído e corte largo. A queridinha do streetwear.",
       unit: Unit.UNIDADE,
       basePrice: 69.9,
@@ -60,6 +65,7 @@ const catalogo: Record<string, Seed[]> = {
     {
       name: "Moletom canguru",
       slug: "moletom-canguru",
+      foto: FOTOS["moletom"],
       description: "Moletom flanelado com bolso canguru e capuz forrado. Estampa frente e/ou costas.",
       unit: Unit.UNIDADE,
       basePrice: 119.9,
@@ -139,6 +145,7 @@ const catalogo: Record<string, Seed[]> = {
     {
       name: "Camisa polo bordada",
       slug: "polo-bordada",
+      foto: FOTOS["polo"],
       description: "Piquet com punho e gola em ribana. Bordado do logo no peito incluso.",
       unit: Unit.UNIDADE,
       basePrice: 89.9,
@@ -225,6 +232,7 @@ async function main() {
           name: p.name,
           slug: p.slug,
           description: p.description,
+          imageUrl: p.foto ?? null,
           categoryId: cat.id,
           unit: p.unit,
           basePrice: p.basePrice,

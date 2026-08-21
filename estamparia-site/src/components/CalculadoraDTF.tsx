@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useCarrinho } from "./CarrinhoProvider";
 import { precoUnitario } from "@/lib/pricing";
 import { brl } from "@/lib/format";
 
-const LARGURA_ROLO = 58; // cm
+const ROLO = 58; // cm de largura útil
+const CORES = ["#29ABE2", "#EC008C", "#FFC20E", "#1B75BC", "#F58220", "#17181C"];
 
 type Produto = {
   id: string;
@@ -17,409 +18,443 @@ type Produto = {
   tiers: { minQty: number; price: number }[];
 };
 
-type Encaixe = {
-  girada: boolean;
-  larguraPeca: number;
-  alturaPeca: number;
-  porFileira: number;
-  fileiras: number;
-  comprimentoCm: number;
-  metros: number;
+type Arte = {
+  id: string;
+  nome: string;
+  imagem: string | null;
+  proporcao: number | null;
+  largura: string;
+  altura: string;
+  qtd: string;
+  girar: boolean;
+  cor: string;
 };
 
-function calcular(w: number, h: number, qtd: number, folga: number, girada: boolean): Encaixe | null {
-  const lp = girada ? h : w;
-  const ap = girada ? w : h;
-  if (lp <= 0 || ap <= 0 || qtd <= 0) return null;
-  if (lp + folga > LARGURA_ROLO) return null;
+type Peca = { arte: Arte; w: number; h: number };
+type Fileira = { y: number; altura: number; pecas: (Peca & { x: number })[] };
 
-  const porFileira = Math.max(1, Math.floor((LARGURA_ROLO + folga) / (lp + folga)));
-  const fileiras = Math.ceil(qtd / porFileira);
-  const comprimentoCm = fileiras * (ap + folga) + folga;
+const num = (v: string) => {
+  const x = parseFloat(String(v).replace(",", "."));
+  return Number.isFinite(x) && x > 0 ? x : 0;
+};
+
+let contador = 0;
+const novaArte = (): Arte => {
+  contador += 1;
   return {
-    girada,
-    larguraPeca: lp,
-    alturaPeca: ap,
-    porFileira,
-    fileiras,
-    comprimentoCm,
-    metros: Math.max(0.5, Math.ceil((comprimentoCm / 100) * 2) / 2),
+    id: `a${contador}${Math.random().toString(36).slice(2, 6)}`,
+    nome: "",
+    imagem: null,
+    proporcao: null,
+    largura: "20",
+    altura: "25",
+    qtd: "10",
+    girar: true,
+    cor: CORES[(contador - 1) % CORES.length],
   };
+};
+
+/** Encaixe por prateleiras: agrupa as peças em fileiras, das mais altas para as mais baixas. */
+function encaixar(artes: Arte[], folga: number) {
+  const pecas: Peca[] = [];
+  let invalida = false;
+
+  for (const a of artes) {
+    const w = num(a.largura);
+    const h = num(a.altura);
+    const q = Math.max(0, Math.round(num(a.qtd)));
+    if (!w || !h || !q) continue;
+
+    let pw = w;
+    let ph = h;
+    if (a.girar && h > w && h <= ROLO) {
+      pw = h;
+      ph = w;
+    }
+    if (pw > ROLO) {
+      if (ph <= ROLO) {
+        const t = pw;
+        pw = ph;
+        ph = t;
+      } else {
+        invalida = true;
+        continue;
+      }
+    }
+    const limite = Math.min(q, 600);
+    for (let i = 0; i < limite; i++) pecas.push({ arte: a, w: pw, h: ph });
+  }
+
+  if (pecas.length === 0) {
+    return { fileiras: [] as Fileira[], comprimento: 0, total: 0, area: 0, invalida };
+  }
+
+  pecas.sort((p, q) => q.h - p.h || q.w - p.w);
+
+  const fileiras: Fileira[] = [];
+  let y = folga;
+  let atual: Fileira | null = null;
+  let cursor = folga;
+
+  for (const p of pecas) {
+    if (!atual || cursor + p.w + folga > ROLO) {
+      if (atual) y += atual.altura + folga;
+      atual = { y, altura: p.h, pecas: [] };
+      fileiras.push(atual);
+      cursor = folga;
+    }
+    atual.pecas.push({ ...p, x: cursor });
+    cursor += p.w + folga;
+    if (p.h > atual.altura) atual.altura = p.h;
+  }
+
+  const comprimento = (atual ? atual.y + atual.altura : 0) + folga;
+  const area = pecas.reduce((s, p) => s + p.w * p.h, 0);
+  return { fileiras, comprimento, total: pecas.length, area, invalida };
 }
 
 export function CalculadoraDTF({ produto }: { produto: Produto | null }) {
-  const [imagem, setImagem] = useState<string | null>(null);
-  const [proporcao, setProporcao] = useState<number | null>(null);
-  const [nomeArquivo, setNomeArquivo] = useState("");
-  const [largura, setLargura] = useState("20");
-  const [altura, setAltura] = useState("25");
-  const [qtd, setQtd] = useState("30");
-  const [travar, setTravar] = useState(true);
+  const [artes, setArtes] = useState<Arte[]>([novaArte()]);
   const [folga, setFolga] = useState("0.5");
   const [adicionado, setAdicionado] = useState(false);
-  const entrada = useRef<HTMLInputElement>(null);
 
   const { adicionar } = useCarrinho();
+  const g = Math.max(0, num(folga));
 
-  const n = (v: string) => {
-    const x = parseFloat(String(v).replace(",", "."));
-    return Number.isFinite(x) && x > 0 ? x : 0;
+  const atualizar = (id: string, campo: Partial<Arte>) => {
+    setArtes((lista) => lista.map((a) => (a.id === id ? { ...a, ...campo } : a)));
+    setAdicionado(false);
   };
 
-  const w = n(largura);
-  const h = n(altura);
-  const quantidade = Math.max(1, Math.round(n(qtd)) || 1);
-  const g = Math.max(0, n(folga));
-
-  function carregarImagem(arquivo?: File) {
+  function carregar(id: string, arquivo?: File) {
     if (!arquivo) return;
-    setNomeArquivo(arquivo.name);
     const leitor = new FileReader();
     leitor.onload = () => {
       const url = String(leitor.result);
-      setImagem(url);
       const img = new Image();
       img.onload = () => {
         const p = img.width / img.height;
-        setProporcao(p);
-        if (travar && n(largura) > 0) {
-          setAltura((n(largura) / p).toFixed(1));
-        }
+        setArtes((lista) =>
+          lista.map((a) =>
+            a.id === id
+              ? {
+                  ...a,
+                  imagem: url,
+                  proporcao: p,
+                  nome: arquivo.name,
+                  altura: num(a.largura) ? (num(a.largura) / p).toFixed(1) : a.altura,
+                }
+              : a
+          )
+        );
       };
       img.src = url;
     };
     leitor.readAsDataURL(arquivo);
-  }
-
-  function mudarLargura(v: string) {
-    setLargura(v);
     setAdicionado(false);
-    if (travar && proporcao) {
-      const x = n(v);
-      if (x > 0) setAltura((x / proporcao).toFixed(1));
-    }
   }
 
-  function mudarAltura(v: string) {
-    setAltura(v);
-    setAdicionado(false);
-    if (travar && proporcao) {
-      const x = n(v);
-      if (x > 0) setLargura((x * proporcao).toFixed(1));
-    }
-  }
+  const plano = useMemo(() => encaixar(artes, g), [artes, g]);
 
-  const { melhor, alternativa, cabe } = useMemo(() => {
-    const a = calcular(w, h, quantidade, g, false);
-    const b = calcular(w, h, quantidade, g, true);
-    const opcoes = [a, b].filter(Boolean) as Encaixe[];
-    if (opcoes.length === 0) return { melhor: null, alternativa: null, cabe: false };
-    opcoes.sort((x, y) => x.comprimentoCm - y.comprimentoCm);
-    return { melhor: opcoes[0], alternativa: opcoes[1] ?? null, cabe: true };
-  }, [w, h, quantidade, g]);
-
-  const metros = melhor?.metros ?? 0;
+  const metros = plano.comprimento ? Math.max(0.5, Math.ceil((plano.comprimento / 100) * 2) / 2) : 0;
   const precoMetro = produto ? precoUnitario(produto, metros || 1) : 0;
-  const total = precoMetro * metros;
-  const aproveitamento = melhor
-    ? Math.min(100, ((quantidade * w * h) / (LARGURA_ROLO * melhor.comprimentoCm)) * 100)
-    : 0;
-  const sobra = melhor ? melhor.porFileira * melhor.fileiras - quantidade : 0;
+  const custo = precoMetro * metros;
+  const aproveitamento = plano.comprimento ? (plano.area / (ROLO * plano.comprimento)) * 100 : 0;
+  const sobraCm = metros * 100 - plano.comprimento;
 
-  // Desenho do rolo
-  const alturaDesenho = melhor ? Math.min(melhor.comprimentoCm, 320) : 100;
-  const escala = 8;
+  const escala = 7;
+  const limiteDesenho = 340;
+  const alturaDesenho = Math.min(Math.max(plano.comprimento, 40), limiteDesenho);
 
-  function enviarParaOrcamento() {
-    if (!produto || !melhor) return;
+  function enviar() {
+    if (!produto || !plano.total) return;
+    const resumo = artes
+      .filter((a) => num(a.largura) && num(a.altura) && num(a.qtd))
+      .map(
+        (a) =>
+          `${Math.round(num(a.qtd))}× ${num(a.largura)}×${num(a.altura)}cm${a.nome ? ` (${a.nome})` : ""}`
+      )
+      .join(" · ");
+
     adicionar({
       productId: produto.id,
       slug: produto.slug,
       nome: produto.name,
       unit: "METRO",
       qtd: metros,
-      larguraCm: w,
-      alturaCm: h,
-      artUrl: undefined,
-      obs: `${quantidade} artes de ${w} × ${h} cm${melhor.girada ? " (giradas 90°)" : ""} — ${melhor.porFileira} por fileira, ${melhor.fileiras} fileiras${nomeArquivo ? ` · arquivo: ${nomeArquivo}` : ""}`,
+      obs: `${plano.total} artes encaixadas em ${metros} m · ${resumo}`,
       precoUnit: precoMetro,
-      subtotal: total,
+      subtotal: custo,
     });
     setAdicionado(true);
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start">
-      {/* Controles */}
-      <div className="rounded-2xl border border-linha bg-white p-6">
-        <h2 className="text-[20px]">Sua arte</h2>
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
+      {/* Artes */}
+      <div className="space-y-4">
+        {artes.map((a, i) => (
+          <div key={a.id} className="overflow-hidden rounded-2xl border border-linha bg-white">
+            <div className="flex items-center gap-3 border-b border-linha px-4 py-3">
+              <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: a.cor }} />
+              <p className="min-w-0 flex-1 truncate text-[15px] font-bold">
+                {a.nome || `Arte ${i + 1}`}
+              </p>
+              {artes.length > 1 && (
+                <button
+                  onClick={() => setArtes((l) => l.filter((x) => x.id !== a.id))}
+                  className="shrink-0 text-[13px] font-medium text-grafite hover:text-magenta"
+                >
+                  remover
+                </button>
+              )}
+            </div>
 
-        <button
-          type="button"
-          onClick={() => entrada.current?.click()}
-          className="mt-4 flex w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-linha bg-fundo px-6 py-8 text-center transition-colors hover:border-azul hover:bg-white"
-        >
-          {imagem ? (
-            <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={imagem} alt="Prévia da arte" className="max-h-28 w-auto object-contain" />
-              <span className="mt-3 max-w-full truncate text-[13px] font-medium text-grafite">
-                {nomeArquivo}
-              </span>
-              <span className="mt-1 text-[13px] font-semibold text-azul">Trocar imagem</span>
-            </>
-          ) : (
-            <>
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[22px] text-azul shadow-cartao">
-                ↑
-              </span>
-              <span className="mt-3 text-[15px] font-bold">Escolher a imagem da arte</span>
-              <span className="mt-1 text-[13px] text-grafite">
-                PNG, JPG ou SVG. A imagem fica só no seu navegador.
-              </span>
-            </>
-          )}
-        </button>
-        <input
-          ref={entrada}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => carregarImagem(e.target.files?.[0])}
-        />
+            <div className="flex gap-4 p-4">
+              <label className="flex h-24 w-24 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-linha bg-fundo transition-colors hover:border-azul">
+                {a.imagem ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={a.imagem} alt="" className="h-full w-full object-contain p-1" />
+                ) : (
+                  <span className="px-2 text-center text-[12px] font-medium leading-tight text-grafite">
+                    escolher
+                    <br />
+                    imagem
+                  </span>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => carregar(a.id, e.target.files?.[0])}
+                />
+              </label>
 
-        <h2 className="mt-8 text-[20px]">Tamanho da estampa</h2>
+              <div className="min-w-0 flex-1">
+                <div className="grid grid-cols-3 gap-2">
+                  <div>
+                    <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-cinza">
+                      Larg. cm
+                    </label>
+                    <input
+                      inputMode="decimal"
+                      value={a.largura}
+                      onChange={(e) =>
+                        atualizar(a.id, {
+                          largura: e.target.value,
+                          ...(a.proporcao && num(e.target.value)
+                            ? { altura: (num(e.target.value) / a.proporcao).toFixed(1) }
+                            : {}),
+                        })
+                      }
+                      className="campo px-2 py-1.5 text-center text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-cinza">
+                      Alt. cm
+                    </label>
+                    <input
+                      inputMode="decimal"
+                      value={a.altura}
+                      onChange={(e) =>
+                        atualizar(a.id, {
+                          altura: e.target.value,
+                          ...(a.proporcao && num(e.target.value)
+                            ? { largura: (num(e.target.value) * a.proporcao).toFixed(1) }
+                            : {}),
+                        })
+                      }
+                      className="campo px-2 py-1.5 text-center text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-cinza">
+                      Qtd.
+                    </label>
+                    <input
+                      inputMode="numeric"
+                      value={a.qtd}
+                      onChange={(e) => atualizar(a.id, { qtd: e.target.value })}
+                      className="campo px-2 py-1.5 text-center text-[14px]"
+                    />
+                  </div>
+                </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          <div>
-            <label className="rotulo-campo" htmlFor="larg">
-              Largura (cm)
-            </label>
-            <input
-              id="larg"
-              inputMode="decimal"
-              value={largura}
-              onChange={(e) => mudarLargura(e.target.value)}
-              className="campo"
-            />
+                <label className="mt-3 flex items-center gap-2 text-[13px] text-grafite">
+                  <input
+                    type="checkbox"
+                    checked={a.girar}
+                    onChange={(e) => atualizar(a.id, { girar: e.target.checked })}
+                    className="h-4 w-4 accent-azul"
+                  />
+                  Pode girar 90° para encaixar melhor
+                </label>
+              </div>
+            </div>
           </div>
-          <div>
-            <label className="rotulo-campo" htmlFor="alt">
-              Altura (cm)
-            </label>
-            <input
-              id="alt"
-              inputMode="decimal"
-              value={altura}
-              onChange={(e) => mudarAltura(e.target.value)}
-              className="campo"
-            />
-          </div>
-        </div>
+        ))}
 
-        {proporcao && (
-          <label className="mt-3 flex items-center gap-2.5 text-[14px] text-grafite">
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={() => setArtes((l) => [...l, novaArte()])}
+            className="botao-vazado px-5 py-2.5 text-[14px]"
+          >
+            + Adicionar outra arte
+          </button>
+          <label className="flex items-center gap-2 text-[13px] text-grafite">
+            Folga
             <input
-              type="checkbox"
-              checked={travar}
-              onChange={(e) => setTravar(e.target.checked)}
-              className="h-4 w-4 accent-azul"
-            />
-            Manter a proporção da imagem ({proporcao.toFixed(2)} : 1)
-          </label>
-        )}
-
-        <div className="mt-5 flex flex-wrap gap-2">
-          {[
-            ["Bolso", 8, 8],
-            ["Peito", 25, 20],
-            ["Costas A4", 21, 29.7],
-            ["Costas grande", 32, 40],
-          ].map(([rot, lw, lh]) => (
-            <button
-              key={rot as string}
-              type="button"
-              onClick={() => {
-                setTravar(false);
-                setLargura(String(lw));
-                setAltura(String(lh));
-                setAdicionado(false);
-              }}
-              className="botao-mini rounded-full"
-            >
-              {rot}
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-8 grid grid-cols-2 gap-4">
-          <div>
-            <label className="rotulo-campo" htmlFor="qtd">
-              Quantas artes
-            </label>
-            <input
-              id="qtd"
-              inputMode="numeric"
-              value={qtd}
-              onChange={(e) => {
-                setQtd(e.target.value);
-                setAdicionado(false);
-              }}
-              className="campo"
-            />
-          </div>
-          <div>
-            <label className="rotulo-campo" htmlFor="folga">
-              Folga entre artes (cm)
-            </label>
-            <input
-              id="folga"
               inputMode="decimal"
               value={folga}
               onChange={(e) => setFolga(e.target.value)}
-              className="campo"
+              className="campo w-16 px-2 py-1.5 text-center text-[14px]"
             />
-          </div>
+            cm
+          </label>
         </div>
       </div>
 
       {/* Resultado */}
-      <div className="rounded-2xl border border-linha bg-white p-6">
-        <h2 className="text-[20px]">Como fica no rolo</h2>
-        <p className="mt-1.5 text-[14px] text-grafite">
-          Rolo de {LARGURA_ROLO} cm de largura — o padrão que usamos aqui.
-        </p>
+      <div className="overflow-hidden rounded-2xl border border-linha bg-white lg:sticky lg:top-24">
+        <div className="faixa-cmyk h-1.5 w-full" />
 
-        {!cabe ? (
-          <div className="mt-6 rounded-xl border border-linha bg-fundo p-8 text-center">
-            <p className="text-[16px] font-bold">Essa arte não cabe no rolo</p>
-            <p className="mx-auto mt-2 max-w-xs text-[14px] leading-relaxed text-grafite">
-              O menor lado precisa ficar abaixo de {LARGURA_ROLO} cm. Reduza a medida ou fale com a
-              gente sobre dividir a arte em partes.
+        <div className="grid grid-cols-2 gap-px bg-linha sm:grid-cols-4">
+          {[
+            ["Metros", metros ? `${metros} m` : "—"],
+            ["Artes", plano.total ? String(plano.total) : "—"],
+            ["Fileiras", plano.fileiras.length ? String(plano.fileiras.length) : "—"],
+            ["Aproveita.", plano.comprimento ? `${aproveitamento.toFixed(0)}%` : "—"],
+          ].map(([k, v]) => (
+            <div key={k} className="bg-white px-4 py-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-cinza">{k}</p>
+              <p className="mt-1 text-[22px] font-extrabold leading-none">{v}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="border-t border-linha p-5">
+          {plano.invalida && (
+            <p className="mb-4 rounded-lg border-l-4 border-magenta bg-magenta/5 px-4 py-3 text-[14px] leading-relaxed">
+              Uma das artes passa de {ROLO} cm nos dois lados e não cabe no rolo. Reduza a medida ou
+              fale com a gente sobre dividir em partes.
             </p>
-          </div>
-        ) : (
-          <>
-            <div className="mt-5 overflow-hidden rounded-xl border border-linha bg-fundo p-4">
-              <svg
-                viewBox={`0 0 ${LARGURA_ROLO * escala} ${alturaDesenho * escala}`}
-                className="mx-auto h-[300px] w-auto"
-                role="img"
-                aria-label="Prévia do encaixe das artes no rolo"
-              >
-                <rect
-                  width={LARGURA_ROLO * escala}
-                  height={alturaDesenho * escala}
-                  fill="#fff"
-                  stroke="#DDE2EA"
-                  strokeWidth="3"
-                />
-                {Array.from({ length: Math.min(melhor!.fileiras, 40) }).map((_, fila) =>
-                  Array.from({ length: melhor!.porFileira }).map((_, col) => {
-                    const indice = fila * melhor!.porFileira + col;
-                    if (indice >= quantidade) return null;
-                    const x = (g + col * (melhor!.larguraPeca + g)) * escala;
-                    const y = (g + fila * (melhor!.alturaPeca + g)) * escala;
-                    const lw = melhor!.larguraPeca * escala;
-                    const lh = melhor!.alturaPeca * escala;
-                    if (y > alturaDesenho * escala) return null;
-                    return imagem ? (
-                      <image
-                        key={indice}
-                        href={imagem}
-                        x={x}
-                        y={y}
-                        width={lw}
-                        height={lh}
-                        preserveAspectRatio="none"
-                        transform={melhor!.girada ? `rotate(90 ${x + lw / 2} ${y + lh / 2})` : undefined}
-                      />
-                    ) : (
-                      <rect
-                        key={indice}
-                        x={x}
-                        y={y}
-                        width={lw}
-                        height={lh}
-                        rx="4"
-                        fill="#29ABE2"
-                        opacity="0.25"
-                        stroke="#1B75BC"
-                        strokeWidth="2"
-                      />
-                    );
-                  })
-                )}
-              </svg>
-              {melhor!.comprimentoCm > 320 && (
-                <p className="mt-3 text-center text-[13px] text-cinza">
-                  Mostrando os primeiros 3,2 m do encaixe.
+          )}
+
+          {plano.total === 0 ? (
+            <div className="rounded-xl bg-fundo px-6 py-14 text-center">
+              <p className="text-[16px] font-bold">Preencha as medidas para ver o encaixe</p>
+              <p className="mx-auto mt-2 max-w-xs text-[14px] leading-relaxed text-grafite">
+                Largura, altura e quantidade de cada arte. Você pode somar quantas artes diferentes
+                quiser na mesma tiragem.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="flex gap-2 rounded-xl bg-fundo p-4">
+                <div className="relative w-10 shrink-0">
+                  {Array.from({ length: Math.floor(alturaDesenho / 50) + 1 }).map((_, i) => (
+                    <span
+                      key={i}
+                      className="absolute right-1 -translate-y-1/2 text-[10px] font-semibold text-cinza"
+                      style={{ top: `${((i * 50) / alturaDesenho) * 100}%` }}
+                    >
+                      {(i * 0.5).toFixed(1)}m
+                    </span>
+                  ))}
+                </div>
+
+                <div className="min-w-0 flex-1 overflow-hidden rounded-lg border-2 border-tinta/10 bg-white">
+                  <svg
+                    viewBox={`0 0 ${ROLO * escala} ${alturaDesenho * escala}`}
+                    className="w-full"
+                    role="img"
+                    aria-label="Prévia do encaixe das artes no rolo"
+                  >
+                    {plano.fileiras.map((f, fi) =>
+                      f.pecas.map((p, idx) => {
+                        if (f.y > alturaDesenho) return null;
+                        const x = p.x * escala;
+                        const y = f.y * escala;
+                        const w = p.w * escala;
+                        const h = p.h * escala;
+                        return p.arte.imagem ? (
+                          <image
+                            key={`${fi}-${idx}`}
+                            href={p.arte.imagem}
+                            x={x}
+                            y={y}
+                            width={w}
+                            height={h}
+                            preserveAspectRatio="none"
+                          />
+                        ) : (
+                          <rect
+                            key={`${fi}-${idx}`}
+                            x={x}
+                            y={y}
+                            width={w}
+                            height={h}
+                            rx="3"
+                            fill={p.arte.cor}
+                            fillOpacity="0.22"
+                            stroke={p.arte.cor}
+                            strokeWidth="1.5"
+                          />
+                        );
+                      })
+                    )}
+                  </svg>
+                </div>
+              </div>
+
+              {plano.comprimento > limiteDesenho && (
+                <p className="mt-2 text-center text-[12px] text-cinza">
+                  Mostrando os primeiros {(limiteDesenho / 100).toFixed(1)} m de{" "}
+                  {(plano.comprimento / 100).toFixed(2)} m.
                 </p>
               )}
-            </div>
 
-            <dl className="mt-6 grid grid-cols-2 gap-4">
-              {[
-                ["Cabem por fileira", `${melhor!.porFileira}`],
-                ["Fileiras", `${melhor!.fileiras}`],
-                ["Comprimento usado", `${(melhor!.comprimentoCm / 100).toFixed(2)} m`],
-                ["Aproveitamento do rolo", `${aproveitamento.toFixed(0)}%`],
-              ].map(([k, v]) => (
-                <div key={k} className="rounded-xl bg-fundo p-4">
-                  <dt className="text-[13px] text-grafite">{k}</dt>
-                  <dd className="mt-1 text-[20px] font-extrabold">{v}</dd>
-                </div>
-              ))}
-            </dl>
+              {sobraCm > 5 && (
+                <p className="mt-4 rounded-lg border-l-4 border-amarelo bg-amarelo/10 px-4 py-3 text-[14px] leading-relaxed">
+                  Sobram {sobraCm.toFixed(0)} cm de rolo já pagos. Dá para incluir mais artes sem
+                  aumentar o valor.
+                </p>
+              )}
 
-            {melhor!.girada && (
-              <p className="mt-4 rounded-lg border-l-4 border-amarelo bg-amarelo/10 px-4 py-3 text-[14px]">
-                Girando a arte 90° o encaixe fica mais econômico. Já calculamos assim.
-              </p>
-            )}
-
-            {sobra > 0 && (
-              <p className="mt-3 text-[14px] leading-relaxed text-grafite">
-                Sobra espaço para mais {sobra} {sobra === 1 ? "arte" : "artes"} sem pagar nada a
-                mais. Vale aproveitar.
-              </p>
-            )}
-
-            {produto && (
-              <div className="mt-6 rounded-xl border border-linha bg-fundo p-5">
-                <div className="flex flex-wrap items-end justify-between gap-4">
+              {produto && (
+                <div className="mt-5 flex flex-wrap items-end justify-between gap-4 border-t border-linha pt-5">
                   <div>
                     <p className="text-[13px] text-grafite">
-                      Você vai precisar de <strong className="text-tinta">{metros} m</strong> a{" "}
-                      {brl(precoMetro)} o metro
+                      {metros} m × {brl(precoMetro)} o metro
                     </p>
-                    <p className="mt-1 text-[30px] font-extrabold leading-none">{brl(total)}</p>
+                    <p className="mt-1 text-[32px] font-extrabold leading-none">{brl(custo)}</p>
                     <p className="mt-1 text-[13px] text-grafite">
-                      {brl(total / quantidade)} por arte
+                      {brl(custo / plano.total)} por arte
                     </p>
                   </div>
-                  <button type="button" onClick={enviarParaOrcamento} className="botao">
+                  <button onClick={enviar} className="botao">
                     Adicionar ao orçamento
                   </button>
                 </div>
+              )}
 
-                {adicionado && (
-                  <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-linha pt-4">
-                    <p className="text-[14px]">Adicionado ao seu orçamento.</p>
-                    <Link href="/orcamento" className="botao-mini">
-                      Revisar e enviar
-                    </Link>
-                  </div>
-                )}
+              {adicionado && (
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <p className="text-[14px]">Adicionado ao seu orçamento.</p>
+                  <Link href="/orcamento" className="botao-mini">
+                    Revisar e enviar
+                  </Link>
+                </div>
+              )}
 
-                <p className="mt-4 text-[13px] leading-relaxed text-grafite">
-                  Estimativa para você se planejar. Ao enviar o pedido, conferimos o arquivo e
-                  devolvemos o valor fechado com o prazo.
-                </p>
-              </div>
-            )}
-          </>
-        )}
+              <p className="mt-4 text-[13px] leading-relaxed text-grafite">
+                Estimativa para você se planejar. Ao enviar o pedido, conferimos os arquivos e
+                devolvemos o valor fechado com o prazo.
+              </p>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

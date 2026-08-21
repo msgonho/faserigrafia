@@ -3,6 +3,7 @@ import { db } from "@/lib/prisma";
 import { getAjustes } from "@/lib/settings";
 import { CartaoProduto } from "@/components/CartaoProduto";
 import { Ilustra } from "@/components/Ilustra";
+import { FOTO_CAPA } from "@/lib/fotos";
 
 export const dynamic = "force-dynamic";
 
@@ -49,8 +50,16 @@ export default async function Home() {
   return (
     <>
       {/* Topo */}
-      <section className="malha relative overflow-hidden text-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 py-16 md:py-24 lg:grid-cols-[1.05fr_.95fr]">
+      <section className="relative overflow-hidden bg-[#0E0F13] text-white">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={FOTO_CAPA}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0E0F13] via-[#0E0F13]/85 to-transparent" />
+        <div className="malha absolute inset-0 opacity-70 mix-blend-screen" />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 py-16 md:py-24 lg:grid-cols-[1.05fr_.95fr]">
           <div className="surge">
             <span className="vidro inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-medium text-white/90">
               <span className="h-2 w-2 rounded-full bg-[#29ABE2]" />
@@ -107,15 +116,15 @@ export default async function Home() {
           <div className="surge grid grid-cols-2 gap-4 [animation-delay:.12s]">
             {[
               { tipo: "camiseta" as const, rot: "-rotate-2" },
-              { tipo: "dtf-rolo" as const, rot: "rotate-2 translate-y-5" },
-              { tipo: "caneca" as const, rot: "rotate-1 -translate-y-2" },
-              { tipo: "ecobag" as const, rot: "-rotate-1 translate-y-3" },
+              { tipo: "camiseta-vestida" as const, rot: "rotate-2 translate-y-5" },
+              { tipo: "moletom" as const, rot: "rotate-1 -translate-y-2" },
+              { tipo: "camiseta-cabide" as const, rot: "-rotate-1 translate-y-3" },
             ].map((c) => (
               <div
                 key={c.tipo}
                 className={`overflow-hidden rounded-2xl bg-white shadow-alto transition-transform duration-500 hover:rotate-0 hover:scale-[1.03] ${c.rot}`}
               >
-                <Ilustra tipo={c.tipo} className="h-full w-full" />
+                <Ilustra tipo={c.tipo} className="aspect-[4/5] h-full w-full" />
               </div>
             ))}
           </div>
