@@ -14,7 +14,7 @@ orçamento, mais um painel em `/admin` onde a equipe recebe e trata cada pedido.
 - Página de confirmação com o número do pedido
 
 **Painel `/admin`** (login em `/entrar`)
-- Início: pedidos esperando resposta, em produção, do mês e valor fechado no mês
+- Início: pedidos esperando resposta, em produção, do mês e valor fechado no mês 
 - Orçamentos: lista com filtro por status e busca; tela de detalhe com ordem de serviço,
   link direto de WhatsApp, mudança de status, valor fechado e anotação interna
 - Produtos: cadastrar, editar, publicar/ocultar e excluir; preço base, quantidade mínima,
