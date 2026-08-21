@@ -2,7 +2,7 @@
 
 Site público onde o cliente monta o pedido (camiseta, DTF por metro, brinde) e envia o
 orçamento, mais um painel em `/admin` onde a equipe recebe e trata cada pedido.
-
+ 
 ## O que já vem pronto
 
 **Site**
