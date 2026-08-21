@@ -39,7 +39,7 @@ export default async function PaginaProduto({ params }: { params: Promise<{ slug
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-10">
+    <div className="mx-auto max-w-[1400px] px-6 lg:px-10 py-10">
       <nav className="text-[13px] font-medium text-grafite">
         <Link href="/catalogo" className="hover:text-azul">
           Catálogo

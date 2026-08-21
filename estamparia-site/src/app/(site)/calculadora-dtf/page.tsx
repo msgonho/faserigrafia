@@ -29,7 +29,7 @@ export default async function PaginaCalculadora() {
   return (
     <div>
       <div className="malha text-white">
-        <div className="mx-auto max-w-6xl px-5 py-12 md:py-16">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10 py-12 md:py-16">
           <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-[#29ABE2]">
             Ferramenta exclusiva
           </p>
@@ -38,19 +38,19 @@ export default async function PaginaCalculadora() {
           </h1>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-white/70">
             Some quantas artes diferentes quiser, informe o tamanho de cada uma e veja o encaixe real
-            no rolo de 58 cm — com a metragem e o valor calculados na hora.
+            no rolo, na largura da impressora — com a metragem e o valor calculados na hora.
           </p>
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-5 py-12">
+      <div className="mx-auto max-w-[1400px] px-6 lg:px-10 py-12">
         <CalculadoraDTF produto={produto} />
 
         <div className="mt-14 grid gap-6 border-t border-linha pt-10 md:grid-cols-3">
           {[
             [
               "Por que o encaixe importa",
-              "O DTF é vendido por metro linear de um rolo de 58 cm. Quanto melhor as artes se encaixam lado a lado, menos metro você paga pela mesma quantidade de estampas.",
+              "O DTF é vendido por metro linear. Quanto melhor as artes se encaixam lado a lado na largura do rolo, menos metro você paga pela mesma quantidade de estampas.",
             ],
             [
               "Várias artes na mesma tiragem",

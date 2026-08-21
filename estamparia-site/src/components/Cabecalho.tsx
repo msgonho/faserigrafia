@@ -21,7 +21,7 @@ export function Cabecalho() {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="barra-cmyk rounded-none" style={{ height: 4 }} />
-      <div className="mx-auto flex max-w-6xl items-center gap-6 px-5 py-3">
+      <div className="mx-auto flex max-w-[1400px] items-center gap-6 px-5 py-3">
         <Link href="/" onClick={() => setAberto(false)} className="shrink-0">
           <Logo className="h-11 w-auto md:h-12" />
         </Link>

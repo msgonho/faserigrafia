@@ -170,7 +170,8 @@ function Generico() {
   );
 }
 
-const mapa: Record<string, (props?: any) => any> = {  camiseta: Camiseta,
+const mapa: Record<string, (props?: any) => any> = {
+  camiseta: Camiseta,
   moletom: Moletom,
   polo: Polo,
   bone: Bone,

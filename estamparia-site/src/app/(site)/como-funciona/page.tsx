@@ -98,7 +98,7 @@ export default async function ComoFunciona() {
   return (
     <div>
       <div className="malha text-white">
-        <div className="mx-auto max-w-6xl px-5 py-12 md:py-16">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10 py-12 md:py-16">
           <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-[#29ABE2]">
             Passo a passo
           </p>
@@ -138,7 +138,7 @@ export default async function ComoFunciona() {
 
       {/* Técnicas */}
       <section className="bg-fundo py-16">
-        <div className="mx-auto max-w-6xl px-5">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <p className="rotulo">Qual técnica usar</p>
           <h2 className="mt-3 text-[clamp(1.7rem,4vw,2.3rem)]">Cada trabalho pede um caminho</h2>
           <div className="barra-cmyk mt-5 w-28" />
@@ -203,7 +203,7 @@ export default async function ComoFunciona() {
       </section>
 
       {/* Chamada */}
-      <section className="mx-auto max-w-6xl px-5 pb-20">
+      <section className="mx-auto max-w-[1400px] px-6 lg:px-10 pb-20">
         <div className="faixa-cmyk overflow-hidden rounded-3xl p-1">
           <div className="rounded-[1.35rem] bg-[#0E0F13] px-8 py-12 text-center">
             <h2 className="text-[clamp(1.6rem,4vw,2.3rem)] text-white">Pronto para começar?</h2>

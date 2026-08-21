@@ -59,7 +59,7 @@ export default async function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0E0F13] via-[#0E0F13]/85 to-transparent" />
         <div className="malha absolute inset-0 opacity-70 mix-blend-screen" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 py-16 md:py-24 lg:grid-cols-[1.05fr_.95fr]">
+        <div className="relative mx-auto grid max-w-[1400px] items-center gap-14 px-5 py-16 md:py-24 lg:grid-cols-[1.05fr_.95fr]">
           <div className="surge">
             <span className="vidro inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-medium text-white/90">
               <span className="h-2 w-2 rounded-full bg-[#29ABE2]" />
@@ -133,7 +133,7 @@ export default async function Home() {
 
       {/* Selos de confiança */}
       <section className="border-b border-linha bg-white">
-        <div className="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div className="mx-auto grid max-w-[1400px] gap-8 px-5 py-10 sm:grid-cols-3">
           {[
             ["Cor fiel do começo ao fim", "Prova impressa antes de rodar a tiragem inteira."],
             ["Resposta em 1 dia útil", "Pedido enviado pelo site não fica esperando."],
@@ -152,7 +152,7 @@ export default async function Home() {
 
       {/* Categorias */}
       <section className="bg-fundo py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-5">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <p className="rotulo">Catálogo</p>
           <h2 className="mt-3 text-[clamp(1.7rem,4vw,2.5rem)]">O que a gente produz</h2>
           <div className="barra-cmyk mt-5 w-28" />
@@ -180,7 +180,7 @@ export default async function Home() {
 
       {/* Destaques */}
       {destaques.length > 0 && (
-        <section className="mx-auto max-w-6xl px-5 py-16 md:py-20">
+        <section className="mx-auto max-w-[1400px] px-6 lg:px-10 py-16 md:py-20">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="rotulo">Mais pedidos</p>
@@ -201,7 +201,7 @@ export default async function Home() {
 
       {/* Para quem */}
       <section className="bg-fundo py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-5">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <p className="rotulo">Para quem produzimos</p>
           <h2 className="mt-3 text-[clamp(1.7rem,4vw,2.5rem)]">Cada pedido tem sua exigência</h2>
           <div className="barra-cmyk mt-5 w-28" />
@@ -225,7 +225,7 @@ export default async function Home() {
 
       {/* Como funciona */}
       <section className="malha py-16 text-white md:py-20">
-        <div className="mx-auto max-w-6xl px-5">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-[#29ABE2]">
             Passo a passo
           </p>
@@ -249,7 +249,7 @@ export default async function Home() {
       </section>
 
       {/* Calculadora */}
-      <section className="mx-auto max-w-6xl px-5 pb-4">
+      <section className="mx-auto max-w-[1400px] px-6 lg:px-10 pb-4">
         <div className="overflow-hidden rounded-3xl border border-linha bg-white">
           <div className="grid gap-8 p-8 md:grid-cols-[1.1fr_.9fr] md:items-center md:p-12">
             <div>
@@ -308,7 +308,7 @@ export default async function Home() {
       </section>
 
       {/* Chamada final */}
-      <section className="mx-auto max-w-6xl px-5 pb-20">
+      <section className="mx-auto max-w-[1400px] px-6 lg:px-10 pb-20">
         <div className="faixa-cmyk overflow-hidden rounded-3xl p-1">
           <div className="rounded-[1.35rem] bg-[#0E0F13] px-8 py-14 text-center md:px-16">
             <h2 className="mx-auto max-w-2xl text-[clamp(1.7rem,4.5vw,2.7rem)] text-white">

@@ -6,7 +6,11 @@ import { useCarrinho } from "./CarrinhoProvider";
 import { precoUnitario } from "@/lib/pricing";
 import { brl } from "@/lib/format";
 
-const ROLO = 58; // cm de largura útil
+const ROLOS = [
+  { valor: 58, rotulo: "58 cm", nota: "rolo padrão" },
+  { valor: 60, rotulo: "60 cm", nota: "impressora 1" },
+  { valor: 120, rotulo: "120 cm", nota: "impressora 2" },
+];
 const CORES = ["#29ABE2", "#EC008C", "#FFC20E", "#1B75BC", "#F58220", "#17181C"];
 
 type Produto = {
@@ -26,7 +30,7 @@ type Arte = {
   largura: string;
   altura: string;
   qtd: string;
-  girar: boolean;
+  rot: "auto" | "0" | "90";
   cor: string;
 };
 
@@ -49,13 +53,13 @@ const novaArte = (): Arte => {
     largura: "20",
     altura: "25",
     qtd: "10",
-    girar: true,
+    rot: "auto",
     cor: CORES[(contador - 1) % CORES.length],
   };
 };
 
 /** Encaixe por prateleiras: agrupa as peças em fileiras, das mais altas para as mais baixas. */
-function encaixar(artes: Arte[], folga: number) {
+function encaixar(artes: Arte[], folga: number, ROLO: number) {
   const pecas: Peca[] = [];
   let invalida = false;
 
@@ -67,7 +71,10 @@ function encaixar(artes: Arte[], folga: number) {
 
     let pw = w;
     let ph = h;
-    if (a.girar && h > w && h <= ROLO) {
+    if (a.rot === "90") {
+      pw = h;
+      ph = w;
+    } else if (a.rot === "auto" && h > w && h <= ROLO) {
       pw = h;
       ph = w;
     }
@@ -116,6 +123,7 @@ function encaixar(artes: Arte[], folga: number) {
 export function CalculadoraDTF({ produto }: { produto: Produto | null }) {
   const [artes, setArtes] = useState<Arte[]>([novaArte()]);
   const [folga, setFolga] = useState("0.5");
+  const [rolo, setRolo] = useState(58);
   const [adicionado, setAdicionado] = useState(false);
 
   const { adicionar } = useCarrinho();
@@ -154,15 +162,15 @@ export function CalculadoraDTF({ produto }: { produto: Produto | null }) {
     setAdicionado(false);
   }
 
-  const plano = useMemo(() => encaixar(artes, g), [artes, g]);
+  const plano = useMemo(() => encaixar(artes, g, rolo), [artes, g, rolo]);
 
   const metros = plano.comprimento ? Math.max(0.5, Math.ceil((plano.comprimento / 100) * 2) / 2) : 0;
   const precoMetro = produto ? precoUnitario(produto, metros || 1) : 0;
   const custo = precoMetro * metros;
-  const aproveitamento = plano.comprimento ? (plano.area / (ROLO * plano.comprimento)) * 100 : 0;
+  const aproveitamento = plano.comprimento ? (plano.area / (rolo * plano.comprimento)) * 100 : 0;
   const sobraCm = metros * 100 - plano.comprimento;
 
-  const escala = 7;
+  const escala = rolo > 80 ? 4 : 7;
   const limiteDesenho = 340;
   const alturaDesenho = Math.min(Math.max(plano.comprimento, 40), limiteDesenho);
 
@@ -281,19 +289,50 @@ export function CalculadoraDTF({ produto }: { produto: Produto | null }) {
                   </div>
                 </div>
 
-                <label className="mt-3 flex items-center gap-2 text-[13px] text-grafite">
-                  <input
-                    type="checkbox"
-                    checked={a.girar}
-                    onChange={(e) => atualizar(a.id, { girar: e.target.checked })}
-                    className="h-4 w-4 accent-azul"
-                  />
-                  Pode girar 90° para encaixar melhor
-                </label>
+                <div className="mt-3 flex items-center gap-2">
+                  <span className="text-[12px] font-semibold text-cinza">Giro</span>
+                  {([
+                    ["auto", "auto"],
+                    ["0", "0°"],
+                    ["90", "90°"],
+                  ] as const).map(([v, r]) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => atualizar(a.id, { rot: v })}
+                      className={`rounded-md px-2.5 py-1 text-[12px] font-semibold transition-colors ${
+                        a.rot === v ? "bg-azul text-white" : "border border-linha text-grafite"
+                      }`}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         ))}
+
+        <div className="rounded-2xl border border-linha bg-white p-4">
+          <p className="mb-2.5 text-[13px] font-semibold text-tinta">Largura do rolo</p>
+          <div className="flex flex-wrap gap-2">
+            {ROLOS.map((r) => (
+              <button
+                key={r.valor}
+                type="button"
+                onClick={() => setRolo(r.valor)}
+                className={`rounded-lg border px-3.5 py-2 text-left transition-colors ${
+                  rolo === r.valor
+                    ? "border-azul bg-azul/5"
+                    : "border-linha hover:border-cinza"
+                }`}
+              >
+                <span className="block text-[15px] font-bold">{r.rotulo}</span>
+                <span className="block text-[11px] text-cinza">{r.nota}</span>
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <button
@@ -336,7 +375,7 @@ export function CalculadoraDTF({ produto }: { produto: Produto | null }) {
         <div className="border-t border-linha p-5">
           {plano.invalida && (
             <p className="mb-4 rounded-lg border-l-4 border-magenta bg-magenta/5 px-4 py-3 text-[14px] leading-relaxed">
-              Uma das artes passa de {ROLO} cm nos dois lados e não cabe no rolo. Reduza a medida ou
+              Uma das artes passa de {rolo} cm nos dois lados e não cabe no rolo. Reduza a medida ou
               fale com a gente sobre dividir em partes.
             </p>
           )}
@@ -366,7 +405,7 @@ export function CalculadoraDTF({ produto }: { produto: Produto | null }) {
 
                 <div className="min-w-0 flex-1 overflow-hidden rounded-lg border-2 border-tinta/10 bg-white">
                   <svg
-                    viewBox={`0 0 ${ROLO * escala} ${alturaDesenho * escala}`}
+                    viewBox={`0 0 ${rolo * escala} ${alturaDesenho * escala}`}
                     className="w-full"
                     role="img"
                     aria-label="Prévia do encaixe das artes no rolo"

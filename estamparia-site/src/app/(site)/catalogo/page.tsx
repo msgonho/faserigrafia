@@ -28,7 +28,7 @@ export default async function Catalogo({
   return (
     <div>
       <div className="malha text-white">
-        <div className="mx-auto max-w-6xl px-5 py-12 md:py-16">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10 py-12 md:py-16">
           <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-[#29ABE2]">Catálogo</p>
           <h1 className="mt-3 text-[clamp(1.9rem,5vw,3rem)] text-white">
             {atual ? atual.name : "Tudo que a gente estampa"}
@@ -39,7 +39,7 @@ export default async function Catalogo({
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-5 py-10">
+      <div className="mx-auto max-w-[1400px] px-6 lg:px-10 py-10">
 
       <nav className="flex flex-wrap gap-2 border-b border-linha pb-6">
         <Link

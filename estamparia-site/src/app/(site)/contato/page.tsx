@@ -14,7 +14,7 @@ export default async function Contato() {
   return (
     <div>
       <div className="malha text-white">
-        <div className="mx-auto max-w-6xl px-5 py-12 md:py-16">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10 py-12 md:py-16">
           <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-[#29ABE2]">
             Onde estamos
           </p>
@@ -25,7 +25,7 @@ export default async function Contato() {
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 lg:grid-cols-[1fr_1.15fr] lg:items-start">
+      <div className="mx-auto grid max-w-[1400px] gap-10 px-5 py-14 lg:grid-cols-[1fr_1.15fr] lg:items-start">
         <div>
           <div className="space-y-6">
             {a.telefone && (

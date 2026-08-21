@@ -5,7 +5,7 @@ export function Rodape({ ajustes }: { ajustes: Record<string, string> }) {
   return (
     <footer className="mt-20 bg-tinta text-white">
       <div className="barra-cmyk rounded-none" style={{ height: 4 }} />
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-4">
+      <div className="mx-auto grid max-w-[1400px] gap-10 px-5 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="inline-block rounded-xl bg-white p-3">
             <Logo className="h-12 w-auto" />
@@ -85,7 +85,7 @@ export function Rodape({ ajustes }: { ajustes: Record<string, string> }) {
       </div>
 
       <div className="border-t border-white/10">
-        <p className="mx-auto max-w-6xl px-5 py-5 text-[14px] text-white/40">
+        <p className="mx-auto max-w-[1400px] px-6 lg:px-10 py-5 text-[14px] text-white/40">
           {ajustes.nomeEmpresa || "F&A Serigrafia"} · Botucatu, São Paulo
         </p>
       </div>
